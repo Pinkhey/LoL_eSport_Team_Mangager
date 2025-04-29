@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Linq;
+using cnTeamManager;
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -19,6 +21,13 @@ namespace LoL_eSport_Team_Mangager
         public MainWindow()
         {
             InitializeComponent();
+
+            //ha 3 a csapatok száma akkor jó
+            using (var context = new cnTeamManager.TeamManagerContext())
+            {
+                var teams = context.Teams.ToList();
+                MessageBox.Show($"Csapatok száma: {teams.Count}");
+            }
         }
     }
 }

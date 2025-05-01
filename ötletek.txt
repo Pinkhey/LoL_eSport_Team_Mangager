@@ -1,0 +1,1 @@
+-Ha egy edzőnek még nincs csapata, és van olyan csapat ahol még nincs edző, tud választani a csapatok közül az edző, hogy hova akarja magát igazolni

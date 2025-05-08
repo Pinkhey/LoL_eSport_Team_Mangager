@@ -4,6 +4,40 @@
              xmlns:local="clr-namespace:LoL_eSport_Team_Mangager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Button">
+            <!-- Alap állapot -->
+            <Setter Property="Background" Value="#333" />
+            <Setter Property="Foreground" Value="#ddd" />
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <!-- Hover effekt -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1e90ff"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="LightBlue" BlurRadius="8" ShadowDepth="0"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <!-- Nyomott állapot (kattintáskor) -->
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#1565c0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>

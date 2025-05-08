@@ -10,8 +10,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Linq;
 using cnTeamManager;
+using LoL_eSport_Team_Mangager;
 
-namespace LoL_eSport_Team_Mangager
+namespace LoL_eSport_Team_Manager
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -22,12 +23,42 @@ namespace LoL_eSport_Team_Mangager
         {
             InitializeComponent();
 
-            //ha 3 a csapatok száma akkor jó
+
             using (var context = new cnTeamManager.TeamManagerContext())
             {
                 var teams = context.Teams.ToList();
                 MessageBox.Show($"Csapatok száma: {teams.Count}");
             }
         }
+
+
+
+        private void Dashboard_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new DashboardPage());
+        }
+
+        private void Players_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new PlayersPage());
+        }
+
+        private void Matches_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new MatchesPage());
+        }
+
+        private void Statistics_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new StatisticsPage());
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new LoginPage());
+            LogoutButton.Visibility = Visibility.Collapsed;
+        }
     }
+
+
 }

@@ -2,14 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="LoginPage.xaml">
+             StartupUri="LoginWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Bundled Theme -->
                 <materialDesign:BundledTheme BaseTheme="Dark"
-                                         PrimaryColor="BlueGrey"
-                                         SecondaryColor="Cyan" />
+                             PrimaryColor="Indigo"
+                             SecondaryColor="Amber" />
+
 
                 <!-- Material Design 2 alapértelmezett stílusok -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
@@ -25,6 +26,16 @@
             <Style TargetType="Button">
                 <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Roboto"/>
             </Style>
+            <SolidColorBrush x:Key="LoLPrimaryBrush" Color="#0A1428"/>
+            <!-- Mélykék háttér -->
+            <SolidColorBrush x:Key="LoLAccentBrush" Color="#C89B3C"/>
+            <!-- Arany fő szín -->
+            <SolidColorBrush x:Key="LoLSecondaryBrush" Color="#1E2A46"/>
+            <!-- Világoskék -->
+            <SolidColorBrush x:Key="LoLTextBrush" Color="#E5E5E5"/>
+            <!-- Fehér/világosszürke -->
+            <SolidColorBrush x:Key="LoLErrorBrush" Color="#CD4631"/>
+            <!-- Piros hibához -->
         </ResourceDictionary>
     </Application.Resources>
 

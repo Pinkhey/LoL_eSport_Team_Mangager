@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="fonts\Roboto-Regular.ttf" />
+    <None Remove="Videos\animated-thresh.mp4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +27,9 @@
 
   <ItemGroup>
     <Resource Include="fonts\Roboto-Regular.ttf" />
+    <Content Include="Videos\animated-thresh.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -26,18 +26,20 @@ namespace LoL_eSport_Team_Mangager
             InitializeComponent();
         }
 
+
+
         private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UsernamePlaceholder.Visibility = string.IsNullOrEmpty(UsernameTextBox.Text)
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+           // UsernamePlaceholder.Visibility = string.IsNullOrEmpty(UsernameTextBox.Text)
+             //   ? Visibility.Visible
+               // : Visibility.Collapsed;
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            PasswordPlaceholder.Visibility = string.IsNullOrEmpty(PasswordBox.Password)
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+            //PasswordPlaceholder.Visibility = string.IsNullOrEmpty(PasswordBox.Password)
+              //  ? Visibility.Visible
+                //: Visibility.Collapsed;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -69,6 +71,17 @@ namespace LoL_eSport_Team_Mangager
                 }
             }
         }
+
+        private void BackgroundVideo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            BackgroundVideo.Position = TimeSpan.Zero;
+            BackgroundVideo.Play();
+        }
+        private void BackgroundVideo_Loaded(object sender, RoutedEventArgs e)
+        {
+            BackgroundVideo.Play();  // Indítjuk manuálisan!
+        }
+
     }
 }
 

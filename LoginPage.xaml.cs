@@ -47,9 +47,15 @@ namespace LoL_eSport_Team_Mangager
 
             if (username == "admin" && password == "1234")
             {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.MainFrame.Content = null;
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+
+                
+                mainWindow.LoggedInUsername = username;
+                mainWindow.UsernameDisplay.Text = $"Felhasználónév: {username}";
+
                 mainWindow.LogoutButton.Visibility = Visibility.Visible;
+                Window.GetWindow(this).Close();
             }
             else
             {
@@ -58,3 +64,4 @@ namespace LoL_eSport_Team_Mangager
         }
     }
 }
+

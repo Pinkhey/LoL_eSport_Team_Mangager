@@ -23,6 +23,14 @@
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="20,0,0,0"/>
+
+            <TextBlock x:Name="UsernameDisplay"
+               Foreground="White"
+               FontSize="16"
+               VerticalAlignment="Center"
+               Margin="20,0,0,0"
+               DockPanel.Dock="Right" />
+
             <Button Content="Kijelentkezés"
                     HorizontalAlignment="Right"
                     Margin="0,0,20,0"

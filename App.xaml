@@ -1,43 +1,31 @@
 ﻿<Application x:Class="LoL_eSport_Team_Mangager.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:LoL_eSport_Team_Mangager"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="Button">
-            <!-- Alap állapot -->
-            <Setter Property="Background" Value="#333" />
-            <Setter Property="Foreground" Value="#ddd" />
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <!-- Hover effekt -->
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#1e90ff"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="Effect">
-                        <Setter.Value>
-                            <DropShadowEffect Color="LightBlue" BlurRadius="8" ShadowDepth="0"/>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-                <!-- Nyomott állapot (kattintáskor) -->
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#1565c0"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Bundled Theme -->
+                <materialDesign:BundledTheme BaseTheme="Dark"
+                                         PrimaryColor="BlueGrey"
+                                         SecondaryColor="Cyan" />
+
+                <!-- Material Design 2 alapértelmezett stílusok -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- FONT Style-ok (ezek most már BENNE vannak a ResourceDictionary-ben!) -->
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Roboto"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Roboto"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Roboto"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
+
 </Application>

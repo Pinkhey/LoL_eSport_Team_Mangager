@@ -55,10 +55,18 @@ namespace LoL_eSport_Team_Manager
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new LoginPage());
-            LogoutButton.Visibility = Visibility.Collapsed;
-            UsernameDisplay.Text = ""; // Clear username display
-            LoggedInUsername = null;
+            LoginPage loginPage = new LoginPage();
+            Window loginWindow = new Window
+            {
+                Content = loginPage,
+                Width = 400,
+                Height = 300,
+                Title = "Bejelentkezés",
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+
+            loginWindow.Show();
+            this.Close(); // Close MainWindow
         }
     }
 }

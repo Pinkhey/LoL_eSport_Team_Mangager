@@ -27,6 +27,14 @@
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="20,0,0,0"/>
+
+            <TextBlock x:Name="UsernameDisplay"
+               Foreground="White"
+               FontSize="16"
+               VerticalAlignment="Center"
+               Margin="20,0,0,0"
+               DockPanel.Dock="Right" />
+
             <Button Content="Kijelentkezés"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Foreground="White"

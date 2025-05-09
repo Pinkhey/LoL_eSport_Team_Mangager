@@ -31,7 +31,7 @@ namespace LoL_eSport_Team_Manager
             }
         }
 
-
+        public string LoggedInUsername { get; set; }
 
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
@@ -57,8 +57,8 @@ namespace LoL_eSport_Team_Manager
         {
             MainFrame.Navigate(new LoginPage());
             LogoutButton.Visibility = Visibility.Collapsed;
+            UsernameDisplay.Text = ""; // Clear username display
+            LoggedInUsername = null;
         }
     }
-
-
 }

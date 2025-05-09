@@ -42,24 +42,31 @@ namespace LoL_eSport_Team_Mangager
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string username = UsernameTextBox.Text;
+            string username = UsernameTextBox.Text.Trim();
             string password = PasswordBox.Password;
 
-            if (username == "admin" && password == "1234")
+            using (var context = new cnTeamManager.TeamManagerContext())
             {
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
+                var user = context.Users
+                                  .FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
 
-                
-                mainWindow.LoggedInUsername = username;
-                mainWindow.UsernameDisplay.Text = $"Felhasználónév: {username}";
+                if (user != null)
+                {
+                    MainWindow mainWindow = new MainWindow
+                    {
+                        LoggedInUsername = username
+                    };
 
-                mainWindow.LogoutButton.Visibility = Visibility.Visible;
-                Window.GetWindow(this).Close();
-            }
-            else
-            {
-                MessageBox.Show("Hibás felhasználónév vagy jelszó!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    mainWindow.Show();
+                    mainWindow.UsernameDisplay.Text = $"Felhasználónév: {username}";
+                    mainWindow.LogoutButton.Visibility = Visibility.Visible;
+
+                    Window.GetWindow(this)?.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hibás felhasználónév vagy jelszó!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

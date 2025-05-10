@@ -27,11 +27,11 @@ namespace LoL_eSport_Team_Manager
             InitializeComponent();
 
 
-            using (var context = new cnTeamManager.TeamManagerContext())
-            {
-                var teams = context.Teams.ToList();
-                MessageBox.Show($"Csapatok száma: {teams.Count}");
-            }
+            //using (var context = new cnTeamManager.TeamManagerContext())
+            //{
+            //    var teams = context.Teams.ToList();
+            //    MessageBox.Show($"Csapatok száma: {teams.Count}");
+            //}
         }
 
         private void Dashboard_Click(object sender, RoutedEventArgs e)

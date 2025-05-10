@@ -61,17 +61,17 @@ namespace LoL_eSport_Team_Manager
             this.Close();
         }
 
-        private void AddPlayerButton_Click(object sender, RoutedEventArgs e)
+        private void AddCoachButton_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new RegisterPage());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Hide AddPlayerButton for non-admin users
+            // Hide AddCoachButton for non-admin users
             if (!IsUserAdmin)
             {
-                AddPlayerButton.Visibility = Visibility.Collapsed;
+                AddCoachButton.Visibility = Visibility.Collapsed;
             }
         }
     }

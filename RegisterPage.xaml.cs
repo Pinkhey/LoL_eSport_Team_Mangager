@@ -68,5 +68,10 @@ namespace LoL_eSport_Team_Mangager
                 IsAdminCheckBox.IsChecked = false;
             }
         }
+
+        private void DeleteUserFromDatabase_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

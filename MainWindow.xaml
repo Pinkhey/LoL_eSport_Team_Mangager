@@ -43,14 +43,14 @@
                Margin="20,0,0,0"
                DockPanel.Dock="Right" />
 
-            <Button Content="Játékos hozzáadása"
+            <Button Content="Edző hozzáadása"
                 Style="{StaticResource MaterialDesignOutlinedButton}"
                 Foreground="White"
                 HorizontalAlignment="Right"
                 Margin="0,0,20,0"
                 VerticalAlignment="Center"
-                x:Name="AddPlayerButton"
-                Click="AddPlayerButton_Click"/>
+                x:Name="AddCoachButton"
+                Click="AddCoachButton_Click"/>
 
             <Button Content="Kijelentkezés"
                     Style="{StaticResource MaterialDesignOutlinedButton}"

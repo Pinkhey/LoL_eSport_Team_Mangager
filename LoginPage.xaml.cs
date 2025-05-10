@@ -55,22 +55,26 @@ namespace LoL_eSport_Team_Mangager
             {
                 var user = context.Users
                                   .FirstOrDefault(u => u.Username == username && u.PasswordHash == hashedInput);
-
                 
                 if (user != null)
                 {
 
                     bool isAdmin = user.IsAdmin;
+                    var team = context.Teams.FirstOrDefault(t => t.CoachId == user.UserId); 
 
                     MainWindow mainWindow = new MainWindow
                     {
                         LoggedInUsername = username,
                         IsUserAdmin = isAdmin,
+                        LoggedInUserId = user.UserId,
+                        LoggedInCoachTeamId = team.Id // null-safe
                     };
 
                     mainWindow.Show();
                     mainWindow.UsernameDisplay.Text = $"Felhasználónév: {username}";
-                    mainWindow.IsUserAdminDisplay.Text = isAdmin ? "admin" : "user";
+                    mainWindow.IsUserAdminDisplay.Text = isAdmin ? "admin" : "coach";
+                    mainWindow.UserIdDisplay.Text = $"User ID: {user.UserId}";
+                    mainWindow.TeamIdDisplay.Text = team != null ? $"Team ID: {team.Id}" : "Team ID: None";
                     mainWindow.LogoutButton.Visibility = Visibility.Visible;
 
                     Window.GetWindow(this)?.Close();
@@ -90,7 +94,7 @@ namespace LoL_eSport_Team_Mangager
         private void BackgroundVideo_Loaded(object sender, RoutedEventArgs e)
         {
             BackgroundVideo.Play();  // Indítjuk manuálisan!
-        }
+        }   
 
     }
 }

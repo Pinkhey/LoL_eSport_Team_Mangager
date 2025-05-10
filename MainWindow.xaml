@@ -36,6 +36,9 @@
                Margin="20,0,0,0"
                DockPanel.Dock="Right" />
 
+            <TextBlock x:Name="UserIdDisplay" FontWeight="Bold" Margin="10"/>
+            <TextBlock x:Name="TeamIdDisplay" FontWeight="Bold" Margin="10"/>
+
             <TextBlock x:Name="IsUserAdminDisplay"
                Foreground="White"
                FontSize="16"

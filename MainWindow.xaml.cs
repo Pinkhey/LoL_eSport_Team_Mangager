@@ -21,6 +21,8 @@ namespace LoL_eSport_Team_Manager
     {
         public string LoggedInUsername { get; set; }
         public bool IsUserAdmin { get; set; }
+        public int LoggedInUserId { get; set; }
+        public int LoggedInCoachTeamId { get; set; } // null if not coaching a team
 
         public MainWindow()
         {
@@ -41,7 +43,7 @@ namespace LoL_eSport_Team_Manager
 
         private void Players_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new PlayersPage());
+            MainFrame.Navigate(new PlayersPage(LoggedInCoachTeamId));
         }
 
         private void Matches_Click(object sender, RoutedEventArgs e)

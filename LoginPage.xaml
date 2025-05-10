@@ -4,73 +4,85 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       Title="LoginPage">
 
-    <Grid>
+    <Viewbox Stretch="Uniform">
+        <Grid Width="900" Height="700">
 
-        <!-- Videó háttér -->
-        <MediaElement Name="BackgroundVideo"
-              Source="Videos/animated-thresh.mp4"
-              LoadedBehavior="Manual"
-              UnloadedBehavior="Stop"
-              IsMuted="True"
-              Stretch="Fill"
-              MediaEnded="BackgroundVideo_MediaEnded"
-              Loaded="BackgroundVideo_Loaded"/>
+            <!-- Videó háttér -->
+            <MediaElement Name="BackgroundVideo"
+                  Source="Videos/animated-thresh.mp4"
+                  LoadedBehavior="Manual"
+                  UnloadedBehavior="Stop"
+                  IsMuted="True"
+                  Stretch="Fill"
+                  MediaEnded="BackgroundVideo_MediaEnded"
+                  Loaded="BackgroundVideo_Loaded"/>
 
-        <!-- Blur réteg -->
-        <Border>
-            <Border.Background>
-                <VisualBrush Visual="{Binding ElementName=BackgroundVideo}"/>
-            </Border.Background>
-            <Border.Effect>
-                <BlurEffect Radius="15"/>
-            </Border.Effect>
-        </Border>
+            <!-- Blur réteg -->
+            <Border>
+                <Border.Background>
+                    <VisualBrush Visual="{Binding ElementName=BackgroundVideo}"/>
+                </Border.Background>
+                <Border.Effect>
+                    <BlurEffect Radius="15"/>
+                </Border.Effect>
+            </Border>
 
-        <!-- Bejelentkező panel -->
-        <Border Width="350"
-        Background="{StaticResource LoLPrimaryBrush}"
-        CornerRadius="10"
-        Padding="20"
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center">
-            <Border.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
-            </Border.Effect>
+            <!-- Bejelentkező panel -->
+            <Border Width="350"
+            Background="{StaticResource LoLPrimaryBrush}"
+            CornerRadius="10"
+            Padding="20"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
+                </Border.Effect>
 
-            <StackPanel>
+                <StackPanel>
 
-                <!-- Title -->
-                <TextBlock Text="Bejelentkezés"
-                   Foreground="{StaticResource LoLAccentBrush}"
-                   FontSize="26"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,20"/>
+                    <!-- Kép a bejelentkezés fölött -->
+                    <Image Source="Images/logo.png"
+                    Height="100"
+                    Margin="0,0,0,20"
+                    HorizontalAlignment="Center"
+                    RenderOptions.BitmapScalingMode="HighQuality"/>
 
-                <!-- Username -->
-                <TextBox x:Name="UsernameTextBox"
-                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                 Background="{StaticResource LoLSecondaryBrush}"
-                 Foreground="{StaticResource LoLTextBrush}"
-                 materialDesign:HintAssist.Hint="Felhasználónév"
-                 Margin="0,0,0,15"/>
 
-                <!-- Password -->
-                <PasswordBox x:Name="PasswordBox"
-                     Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                    <!-- Title -->
+                    <TextBlock Text="Bejelentkezés"
+                       Foreground="{StaticResource LoLAccentBrush}"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+
+                    <!-- Username -->
+                    <TextBox x:Name="UsernameTextBox"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Background="{StaticResource LoLSecondaryBrush}"
                      Foreground="{StaticResource LoLTextBrush}"
-                     materialDesign:HintAssist.Hint="Jelszó"
-                     Margin="0,0,0,25"/>
+                     materialDesign:HintAssist.Hint="Felhasználónév"
+                     Margin="0,0,0,15"/>
 
-                <!-- Login Button -->
-                <Button Content="Bejelentkezés"
-                Style="{StaticResource MaterialDesignOutlinedButton}"
-                Background="{StaticResource LoLAccentBrush}"
-                Foreground="{StaticResource LoLTextBrush}"
-                Height="40"
-                Click="Button_Click"/>
-            </StackPanel>
-        </Border>
-    </Grid>
+                    <!-- Password -->
+                    <PasswordBox x:Name="PasswordBox"
+                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                         Background="{StaticResource LoLSecondaryBrush}"
+                         Foreground="{StaticResource LoLTextBrush}"
+                         materialDesign:HintAssist.Hint="Jelszó"
+                         Margin="0,0,0,25"/>
+
+                    <!-- Login Button -->
+                    <Button Content="Bejelentkezés"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Background="{StaticResource LoLAccentBrush}"
+                    Foreground="{StaticResource LoLTextBrush}"
+                    Height="40"
+                    Click="Button_Click"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Viewbox>
+
 </Page>

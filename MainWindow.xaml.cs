@@ -22,18 +22,11 @@ namespace LoL_eSport_Team_Manager
         public string LoggedInUsername { get; set; }
         public bool IsUserAdmin { get; set; }
         public int LoggedInUserId { get; set; }
-        public int LoggedInCoachTeamId { get; set; } // null if not coaching a team
+        public int? LoggedInCoachTeamId { get; set; }  // Nullable
 
         public MainWindow()
         {
             InitializeComponent();
-
-
-            //using (var context = new cnTeamManager.TeamManagerContext())
-            //{
-            //    var teams = context.Teams.ToList();
-            //    MessageBox.Show($"Csapatok száma: {teams.Count}");
-            //}
         }
 
         private void Dashboard_Click(object sender, RoutedEventArgs e)
@@ -43,7 +36,24 @@ namespace LoL_eSport_Team_Manager
 
         private void Players_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new PlayersPage(LoggedInCoachTeamId));
+            if (LoggedInCoachTeamId == null && !IsUserAdmin)
+            {
+                MessageBox.Show("Nem tartozik csapat ehhez a felhasználóhoz.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (IsUserAdmin)
+            {
+                var playersPage = new PlayersPage(null, isAdmin: true);
+                MainFrame.Navigate(playersPage);
+            }
+            else
+            {
+                var playersPage = new PlayersPage(LoggedInCoachTeamId /*?? 0*/); // 0 if admin (just for default, can be improved)
+                MainFrame.Navigate(playersPage);
+            }
+
+            
         }
 
         private void Matches_Click(object sender, RoutedEventArgs e)
@@ -70,7 +80,6 @@ namespace LoL_eSport_Team_Manager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Hide AddCoachButton for non-admin users
             if (!IsUserAdmin)
             {
                 AddCoachButton.Visibility = Visibility.Collapsed;

@@ -21,12 +21,40 @@ namespace LoL_eSport_Team_Mangager
     /// </summary>
     public partial class PlayersPage : Page
     {
-        public int TeamId { get; set; }
+        public int? TeamId { get; set; }
 
-        public PlayersPage(int teamId)
+        public bool IsAdmin { get; set; }
+
+        public PlayersPage(int? teamId, bool isAdmin = false)
         {
             InitializeComponent();
             TeamId = teamId;
+            IsAdmin = isAdmin;
+
+            if (IsAdmin)
+            {
+                AdminTeamSelectorPanel.Visibility = Visibility.Visible;
+                LoadTeamsForAdmin();
+            }
+        }
+
+        private void LoadTeamsForAdmin()
+        {
+            using (var context = new cnTeamManager.TeamManagerContext())
+            {
+                var teams = context.Teams.Select(t => new { t.Id, t.Name }).ToList();
+                TeamSelectorComboBox.ItemsSource = teams;
+                TeamSelectorComboBox.DisplayMemberPath = "Name";
+                TeamSelectorComboBox.SelectedValuePath = "Id";
+            }
+        }
+
+        private void TeamSelectorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TeamSelectorComboBox.SelectedValue is int selectedId)
+            {
+                TeamId = selectedId;
+            }
         }
 
         private void AddPlayer_Click(object sender, RoutedEventArgs e)
@@ -34,8 +62,13 @@ namespace LoL_eSport_Team_Mangager
             PlayerForm.Visibility = Visibility.Visible;
         }
 
-        private void SavePlayer_Click(object sender, RoutedEventArgs e) 
+        private void SavePlayer_Click(object sender, RoutedEventArgs e)
         {
+            if (TeamId == null)
+            {
+                MessageBox.Show("Nem vagy jogosult játékosokat hozzáadni ehhez a csapathoz.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             string name = PlayerNameTextBox.Text;
 
@@ -49,13 +82,13 @@ namespace LoL_eSport_Team_Mangager
             {
                 string position = selectedPositionItem.Content.ToString();
 
-                using (var context = new cnTeamManager.TeamManagerContext()) 
+                using (var context = new cnTeamManager.TeamManagerContext())
                 {
                     var newPlayer = new Players
                     {
                         Name = name,
                         Role = position,
-                        TeamId = TeamId,
+                        TeamId = (int)TeamId, // Explicit cast to int
                     };
 
                     context.Players.Add(newPlayer);
@@ -63,8 +96,6 @@ namespace LoL_eSport_Team_Mangager
 
                     MessageBox.Show($"Játékos sikeresen mentve:\nNév: {name}\nPozíció: {position} az adatbázisba!");
                 }
-
-                   
 
                 // Clear form
                 PlayerNameTextBox.Text = "";

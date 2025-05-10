@@ -63,7 +63,7 @@ namespace LoL_eSport_Team_Manager
 
         private void AddPlayerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MainFrame.Navigate(new RegisterPage());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -62,6 +62,10 @@ namespace LoL_eSport_Team_Mangager
                 MessageBox.Show("Sikeres regisztráció!", "Kész", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Optional: navigate back to dashboard or clear form
+
+                UsernameTextBox.Text = string.Empty;
+                PasswordBox.Password = string.Empty;
+                IsAdminCheckBox.IsChecked = false;
             }
         }
     }

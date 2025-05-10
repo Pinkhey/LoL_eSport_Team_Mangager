@@ -9,135 +9,138 @@
         Loaded="Window_Loaded">
 
     <Grid>
-        <!-- Fő rács: Fejléc + Tartalom -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!-- Fejléc -->
-        <DockPanel Grid.Row="0"
-                   Background="{DynamicResource PrimaryHueMidBrush}">
-            <DockPanel.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
-            </DockPanel.Effect>
+        <!-- 🔹 HÁTTÉR: Videó + Blur -->
+        <Grid>
+            <MediaElement Name="BackgroundVideo"
+                          Source="Videos/animated-harrowing.mp4"
+                          LoadedBehavior="Manual"
+                          UnloadedBehavior="Stop"
+                          IsMuted="True"
+                          Stretch="Fill"
+                          MediaEnded="BackgroundVideo_MediaEnded"
+                          Loaded="BackgroundVideo_Loaded"/>
 
-            <TextBlock Text="LoL eSport Team Manager"
-                       Foreground="White"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="20,0,0,0"/>
-
-            <TextBlock x:Name="UsernameDisplay"
-               Foreground="White"
-               FontSize="16"
-               VerticalAlignment="Center"
-               Margin="20,0,0,0"
-               DockPanel.Dock="Right" />
-
-            <TextBlock x:Name="IsUserAdminDisplay"
-               Foreground="White"
-               FontSize="16"
-               VerticalAlignment="Center"
-               Margin="20,0,0,0"
-               DockPanel.Dock="Right" />
-
-            <Button Content="Edző hozzáadása"
-                Style="{StaticResource MaterialDesignOutlinedButton}"
-                Foreground="White"
-                HorizontalAlignment="Right"
-                Margin="0,0,20,0"
-                VerticalAlignment="Center"
-                x:Name="AddCoachButton"
-                Click="AddCoachButton_Click"/>
-
-            <Button Content="Kijelentkezés"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Foreground="White"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,20,0"
-                    VerticalAlignment="Center"
-                    x:Name="LogoutButton"
-                    Click="LogoutButton_Click"/>
-        </DockPanel>
-
-        <!-- Tartalom: Navigációs sáv + Frame -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Oldalsáv -->
-            <Border Background="{DynamicResource PrimaryHueDarkBrush}"
-                    Padding="10">
+            <Border>
+                <Border.Background>
+                    <VisualBrush Visual="{Binding ElementName=BackgroundVideo}" />
+                </Border.Background>
                 <Border.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                    <BlurEffect Radius="15"/>
                 </Border.Effect>
-
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Navigáció"
-                               Foreground="White"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="10,20,0,10"/>
-
-                    <!-- Dashboard -->
-                    <Button Margin="10"
-                            Click="Dashboard_Click"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewDashboard"
-                                                     Width="28" Height="28"
-                                                     Margin="0,0,10,0"/>
-                            <TextBlock Text="Dashboard" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Players -->
-                    <Button Margin="10"
-                            Click="Players_Click"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="AccountGroup"
-                                                     Width="28" Height="28"
-                                                     Margin="0,0,10,0"/>
-                            <TextBlock Text="Players" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Matches -->
-                    <Button Margin="10"
-                            Click="Matches_Click"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Soccer"
-                                                     Width="28" Height="28"
-                                                     Margin="0,0,10,0"/>
-                            <TextBlock Text="Matches" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Statistics -->
-                    <Button Margin="10"
-                            Click="Statistics_Click"
-                            Style="{StaticResource MaterialDesignOutlinedButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ChartBar"
-                                                     Width="28" Height="28"
-                                                     Margin="0,0,10,0"/>
-                            <TextBlock Text="Statistics" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Border>
-
-            <!-- Frame -->
-            <Border Grid.Column="1"
-                    Background="{DynamicResource MaterialDesignPaper}">
-                <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
             </Border>
         </Grid>
+
+        <!-- 🔸 UI TARTALOM -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Fejléc -->
+            <DockPanel Grid.Row="0" Background="{DynamicResource PrimaryHueMidBrush}">
+                <DockPanel.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                </DockPanel.Effect>
+
+                <TextBlock Text="LoL eSport Team Manager"
+                           Foreground="White"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0"/>
+
+                <TextBlock x:Name="UsernameDisplay"
+                           Foreground="White"
+                           FontSize="16"
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0"
+                           DockPanel.Dock="Right" />
+
+                <TextBlock x:Name="IsUserAdminDisplay"
+                           Foreground="White"
+                           FontSize="16"
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0"
+                           DockPanel.Dock="Right" />
+
+                <Button Content="Edző hozzáadása"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Foreground="White"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,20,0"
+                        VerticalAlignment="Center"
+                        x:Name="AddCoachButton"
+                        Click="AddCoachButton_Click"/>
+
+                <Button Content="Kijelentkezés"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Foreground="White"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,20,0"
+                        VerticalAlignment="Center"
+                        x:Name="LogoutButton"
+                        Click="LogoutButton_Click"/>
+            </DockPanel>
+
+            <!-- Tartalom -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Oldalsáv -->
+                <Border Background="{DynamicResource PrimaryHueDarkBrush}" Padding="10">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                    </Border.Effect>
+
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Navigáció"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Margin="10,20,0,10"/>
+
+                        <!-- Menü gombok -->
+                        <Button Margin="10" Click="Dashboard_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ViewDashboard" Width="28" Height="28" Margin="0,0,10,0"/>
+                                <TextBlock Text="Dashboard" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Margin="10" Click="Players_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountGroup" Width="28" Height="28" Margin="0,0,10,0"/>
+                                <TextBlock Text="Players" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Margin="10" Click="Matches_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Soccer" Width="28" Height="28" Margin="0,0,10,0"/>
+                                <TextBlock Text="Matches" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Margin="10" Click="Statistics_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ChartBar" Width="28" Height="28" Margin="0,0,10,0"/>
+                                <TextBlock Text="Statistics" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tartalom Frame -->
+                <Border Grid.Column="1" Background="Transparent">
+                    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+                </Border>
+            </Grid>
+        </Grid>
+
     </Grid>
 </Window>

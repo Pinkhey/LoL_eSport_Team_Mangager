@@ -19,7 +19,7 @@ namespace LoL_eSport_Team_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string LoggedInUsername { get; set; }
+        public string? LoggedInUsername { get; set; }
         public bool IsUserAdmin { get; set; }
 
         public MainWindow()
@@ -68,11 +68,25 @@ namespace LoL_eSport_Team_Manager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            string coachName = UsernameDisplay.Text; // vagy vmi változóból, ha ott van a név
+            MainFrame.Navigate(new Pages.WelcomePage(LoggedInUsername));
+
+
             // Hide AddCoachButton for non-admin users
             if (!IsUserAdmin)
             {
                 AddCoachButton.Visibility = Visibility.Collapsed;
             }
+        }
+        private void BackgroundVideo_Loaded(object sender, RoutedEventArgs e)
+        {
+            BackgroundVideo.Play();
+        }
+
+        private void BackgroundVideo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            BackgroundVideo.Position = TimeSpan.Zero;
+            BackgroundVideo.Play();
         }
     }
 }

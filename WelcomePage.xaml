@@ -1,0 +1,52 @@
+﻿<Page x:Class="LoL_eSport_Team_Manager.Pages.WelcomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <!-- Háttér Blur -->
+        <Border Width="450"
+                Height="250"
+                CornerRadius="20"
+                Background="{StaticResource LoLPrimaryBrush}"
+                Panel.ZIndex="0">
+            <Border.Effect>
+                <BlurEffect Radius="15"/>
+            </Border.Effect>
+        </Border>
+
+        <!-- Tartalom -->
+        <Border Width="450"
+                Height="250"
+                CornerRadius="20"
+                Background="Transparent"
+                Panel.ZIndex="1"
+                BorderBrush="{DynamicResource LoLAccentBrush}"
+                BorderThickness="1">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                <TextBlock Text="Köszöntünk újra a Riftben!"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource LoLAccentBrush}"
+                           TextAlignment="Center"
+                           Margin="0,0,0,10"/>
+
+                <TextBlock x:Name="CoachNameText"
+                           FontSize="28"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           TextAlignment="Center"
+                           Margin="0,0,0,20"/>
+
+                <!-- Idézet -->
+                <TextBlock x:Name="QuoteText"
+               FontStyle="Italic"
+               FontSize="16"
+               Foreground="{DynamicResource LoLAccentBrush}"
+               TextAlignment="Center"
+               TextWrapping="Wrap"
+               Margin="0,10,0,0"/> 
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

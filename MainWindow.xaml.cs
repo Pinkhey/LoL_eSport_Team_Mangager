@@ -56,18 +56,9 @@ namespace LoL_eSport_Team_Manager
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginPage loginPage = new LoginPage();
-            Window loginWindow = new Window
-            {
-                Content = loginPage,
-                Width = 400,
-                Height = 300,
-                Title = "Bejelentkezés",
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
-            };
-
+            LoginWindow loginWindow = new LoginWindow();
             loginWindow.Show();
-            this.Close(); // Close MainWindow
+            this.Close();
         }
 
         private void AddPlayerButton_Click(object sender, RoutedEventArgs e)

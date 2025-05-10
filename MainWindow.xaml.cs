@@ -19,6 +19,9 @@ namespace LoL_eSport_Team_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string LoggedInUsername { get; set; }
+        public bool IsUserAdmin { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,10 +33,6 @@ namespace LoL_eSport_Team_Manager
             //    MessageBox.Show($"Csapatok száma: {teams.Count}");
             //}
         }
-
-        public string LoggedInUsername { get; set; }
-
-        public bool IsUserAdmin { get; set; }
 
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
@@ -57,18 +56,23 @@ namespace LoL_eSport_Team_Manager
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginPage loginPage = new LoginPage();
-            Window loginWindow = new Window
-            {
-                Content = loginPage,
-                Width = 400,
-                Height = 300,
-                Title = "Bejelentkezés",
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
-            };
-
+            LoginWindow loginWindow = new LoginWindow();
             loginWindow.Show();
-            this.Close(); // Close MainWindow
+            this.Close();
+        }
+
+        private void AddPlayerButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Hide AddPlayerButton for non-admin users
+            if (!IsUserAdmin)
+            {
+                AddPlayerButton.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

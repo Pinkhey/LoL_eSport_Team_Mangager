@@ -52,15 +52,21 @@ namespace LoL_eSport_Team_Mangager
                 var user = context.Users
                                   .FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
 
+                
                 if (user != null)
                 {
+
+                    bool isAdmin = user.IsAdmin;
+
                     MainWindow mainWindow = new MainWindow
                     {
-                        LoggedInUsername = username
+                        LoggedInUsername = username,
+                        IsUserAdmin = isAdmin,
                     };
 
                     mainWindow.Show();
                     mainWindow.UsernameDisplay.Text = $"Felhasználónév: {username}";
+                    mainWindow.IsUserAdminDisplay.Text = isAdmin ? "admin" : "user";
                     mainWindow.LogoutButton.Visibility = Visibility.Visible;
 
                     Window.GetWindow(this)?.Close();

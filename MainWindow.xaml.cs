@@ -33,6 +33,8 @@ namespace LoL_eSport_Team_Manager
 
         public string LoggedInUsername { get; set; }
 
+        public bool IsUserAdmin { get; set; }
+
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new DashboardPage());

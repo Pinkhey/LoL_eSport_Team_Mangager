@@ -5,7 +5,8 @@
         Title="LoL eSport Team Manager" Height="700" Width="1000"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
-        Style="{StaticResource MaterialDesignWindow}">
+        Style="{StaticResource MaterialDesignWindow}"
+        Loaded="Window_Loaded">
 
     <Grid>
         <!-- Fő rács: Fejléc + Tartalom -->
@@ -41,6 +42,15 @@
                VerticalAlignment="Center"
                Margin="20,0,0,0"
                DockPanel.Dock="Right" />
+
+            <Button Content="Játékos hozzáadása"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Foreground="White"
+                HorizontalAlignment="Right"
+                Margin="0,0,20,0"
+                VerticalAlignment="Center"
+                x:Name="AddPlayerButton"
+                Click="AddPlayerButton_Click"/>
 
             <Button Content="Kijelentkezés"
                     Style="{StaticResource MaterialDesignOutlinedButton}"

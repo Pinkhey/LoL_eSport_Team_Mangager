@@ -45,12 +45,16 @@ namespace LoL_eSport_Team_Mangager
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTextBox.Text.Trim();
-            string password = PasswordBox.Password;
+            string inputPassword = PasswordBox.Password;
+            MessageBox.Show($"Raw input: [{inputPassword}]");
+            string hashedInput = PasswordHelper.HashPassword(inputPassword);
+            MessageBox.Show($"Hashed: {hashedInput}");
+
 
             using (var context = new cnTeamManager.TeamManagerContext())
             {
                 var user = context.Users
-                                  .FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
+                                  .FirstOrDefault(u => u.Username == username && u.PasswordHash == hashedInput);
 
                 
                 if (user != null)

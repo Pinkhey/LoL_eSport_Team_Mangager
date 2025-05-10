@@ -30,10 +30,11 @@ namespace LoL_eSport_Team_Mangager
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTextBox.Text.Trim();
-            string password = PasswordBox.Password;
+            string rawPassword = PasswordBox.Password;
+            string hashedPassword = PasswordHelper.HashPassword(rawPassword);
             bool isAdmin = IsAdminCheckBox.IsChecked == true;
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(rawPassword))
             {
                 MessageBox.Show("Kérjük, töltsön ki minden mezőt!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -51,7 +52,7 @@ namespace LoL_eSport_Team_Mangager
                 var newUser = new Users
                 {
                     Username = username,
-                    PasswordHash = password,
+                    PasswordHash = hashedPassword,
                     IsAdmin = isAdmin
                 };
 

@@ -24,5 +24,15 @@ namespace LoL_eSport_Team_Mangager
         {
             InitializeComponent();
         }
+
+        private void AddPlayer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeletePlayer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

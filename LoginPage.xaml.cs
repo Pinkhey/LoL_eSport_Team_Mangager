@@ -46,9 +46,9 @@ namespace LoL_eSport_Team_Mangager
         {
             string username = UsernameTextBox.Text.Trim();
             string inputPassword = PasswordBox.Password;
-            MessageBox.Show($"Raw input: [{inputPassword}]");
+            /*MessageBox.Show($"Raw input: [{inputPassword}]");*/
             string hashedInput = PasswordHelper.HashPassword(inputPassword);
-            MessageBox.Show($"Hashed: {hashedInput}");
+            /*MessageBox.Show($"Hashed: {hashedInput}");*/
 
 
             using (var context = new cnTeamManager.TeamManagerContext())

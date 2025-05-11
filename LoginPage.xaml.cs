@@ -88,6 +88,10 @@ namespace LoL_eSport_Team_Mangager
         {
             BackgroundVideo.Play();
         }
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this)?.Close();
+        }
     }
 }
 

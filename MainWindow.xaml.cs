@@ -31,7 +31,7 @@ namespace LoL_eSport_Team_Manager
 
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new DashboardPage());
+            MainFrame.Navigate(new DashboardPage(LoggedInUsername));
         }
 
         private void Players_Click(object sender, RoutedEventArgs e)

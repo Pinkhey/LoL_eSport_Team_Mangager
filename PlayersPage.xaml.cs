@@ -13,26 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeamManagerContext;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoL_eSport_Team_Mangager
 {
-    /// <summary>
-    /// Interaction logic for PlayersPage.xaml
-    /// </summary>
     public partial class PlayersPage : Page
     {
         public int? TeamId { get; set; }
-
         public bool IsAdmin { get; set; }
-
         public bool IsPlayerActiveInThisTeam { get; set; }
 
-        public PlayersPage(int? teamId, bool isAdmin = false)
+        public PlayersPage(int? teamId, bool isAdmin = false, bool isPlayerActiveInThisTeam = true)
         {
             InitializeComponent();
             TeamId = teamId;
             IsAdmin = isAdmin;
+            IsPlayerActiveInThisTeam = isPlayerActiveInThisTeam;
 
             if (IsAdmin)
             {
@@ -45,12 +40,22 @@ namespace LoL_eSport_Team_Mangager
 
         private void LoadTeamsForAdmin()
         {
-            using (var context = new cnTeamManager.TeamManagerContext())
+            try
             {
-                var teams = context.Teams.Select(t => new { t.Id, t.Name }).ToList();
-                TeamSelectorComboBox.ItemsSource = teams;
-                TeamSelectorComboBox.DisplayMemberPath = "Name";
-                TeamSelectorComboBox.SelectedValuePath = "Id";
+                using (var context = new cnTeamManager.TeamManagerContext())
+                {
+                    var teams = context.Teams
+                        .Select(t => new { t.Id, t.Name })
+                        .ToList();
+
+                    TeamSelectorComboBox.ItemsSource = teams;
+                    TeamSelectorComboBox.DisplayMemberPath = "Name";
+                    TeamSelectorComboBox.SelectedValuePath = "Id";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a csapatok betöltésekor: {ex.Message}");
             }
         }
 
@@ -67,16 +72,23 @@ namespace LoL_eSport_Team_Mangager
         {
             if (TeamId == null) return;
 
-            using (var context = new cnTeamManager.TeamManagerContext())
+            try
             {
-                var players = context.Players
-                    .Where(p => p.TeamId == TeamId)
-                    .Select(p => new { p.Id, p.Name })
-                    .ToList();
+                using (var context = new cnTeamManager.TeamManagerContext())
+                {
+                    var players = context.Players
+                        .Where(p => p.TeamId == TeamId && p.IsPlayerActiveInThisTeam == true)
+                        .Select(p => new { p.Id, p.Name })
+                        .ToList();
 
-                PlayerListComboBox.ItemsSource = players;
-                PlayerListComboBox.DisplayMemberPath = "Name";
-                PlayerListComboBox.SelectedValuePath = "Id";
+                    PlayerListComboBox.ItemsSource = players;
+                    PlayerListComboBox.DisplayMemberPath = "Name";
+                    PlayerListComboBox.SelectedValuePath = "Id";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a játékosok betöltésekor: {ex.Message}");
             }
         }
 
@@ -93,7 +105,7 @@ namespace LoL_eSport_Team_Mangager
                 return;
             }
 
-            string name = PlayerNameTextBox.Text;
+            string name = PlayerNameTextBox.Text?.Trim();
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -101,23 +113,36 @@ namespace LoL_eSport_Team_Mangager
                 return;
             }
 
-            if (PlayerPositionComboBox.SelectedItem is ComboBoxItem selectedPositionItem)
+            if (PlayerPositionComboBox.SelectedItem == null)
             {
-                string position = selectedPositionItem.Content.ToString();
+                MessageBox.Show("Kérlek, válassz pozíciót!");
+                return;
+            }
 
+            string position = (PlayerPositionComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString();
+
+            if (string.IsNullOrEmpty(position))
+            {
+                MessageBox.Show("Érvénytelen pozíció kiválasztás.");
+                return;
+            }
+
+            try
+            {
                 using (var context = new cnTeamManager.TeamManagerContext())
                 {
                     var newPlayer = new Players
                     {
                         Name = name,
                         Role = position,
-                        TeamId = (int)TeamId, // Explicit cast to int
+                        TeamId = TeamId.Value,
+                        IsPlayerActiveInThisTeam = true
                     };
 
                     context.Players.Add(newPlayer);
                     context.SaveChanges();
 
-                    MessageBox.Show($"Játékos sikeresen mentve:\nNév: {name}\nPozíció: {position} az adatbázisba!");
+                    MessageBox.Show($"Játékos sikeresen mentve:\nNév: {name}\nPozíció: {position}");
                 }
 
                 // Clear form
@@ -125,18 +150,12 @@ namespace LoL_eSport_Team_Mangager
                 PlayerPositionComboBox.SelectedIndex = -1;
                 PlayerForm.Visibility = Visibility.Collapsed;
 
-                if (IsAdmin)
-                {
-                    TeamSelectorComboBox.SelectedIndex = -1;
-                    TeamSelectorComboBox.Text = string.Empty; // Optional UI refresh
-                    TeamId = null;
-                }
-
+                // Refresh player list
                 LoadPlayersForSelectedTeam();
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Kérlek, válassz pozíciót!");
+                MessageBox.Show($"Hiba mentés közben: {ex.Message}");
             }
         }
 
@@ -144,26 +163,33 @@ namespace LoL_eSport_Team_Mangager
         {
             if (PlayerListComboBox.SelectedValue is int playerId)
             {
-                using (var context = new cnTeamManager.TeamManagerContext())
+                try
                 {
-                    var player = context.Players
-                                         .Where(p => p.TeamId == TeamId && p.IsPlayerActiveInThisTeam)
-                                         .Select(p => new { p.Id, p.Name })
-                                         .ToList();
-
-                    if (player != null)
+                    using (var context = new cnTeamManager.TeamManagerContext())
                     {
-                        player.IsPlayerActiveInThisTeam = false; // Soft delete
-                        context.SaveChanges();
-                        MessageBox.Show($"A(z) {player.Name} játékos inaktiválva lett.");
+                        var player = context.Players
+                            .FirstOrDefault(p => p.Id == playerId && p.TeamId == TeamId && p.IsPlayerActiveInThisTeam == true);
 
-                        LoadPlayersForSelectedTeam(); // Refresh list
-                        PlayerListComboBox.SelectedIndex = -1; // Clear selection
+                        if (player != null)
+                        {
+                            player.IsPlayerActiveInThisTeam = false;
+                            context.SaveChanges();
+
+                            string playerName = player.Name ?? "(ismeretlen név)";
+                            MessageBox.Show($"A(z) {playerName} játékos inaktiválva lett.");
+
+                            LoadPlayersForSelectedTeam();
+                            PlayerListComboBox.SelectedIndex = -1;
+                        }
+                        else
+                        {
+                            MessageBox.Show("A kiválasztott játékos nem található.");
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show("A kiválasztott játékos nem található.");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Hiba a játékos törlésekor: {ex.Message}");
                 }
             }
             else

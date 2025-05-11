@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeamManagerContext;
+using System.IO;
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -28,6 +29,8 @@ namespace LoL_eSport_Team_Mangager
             TeamId = teamId;
             IsAdmin = isAdmin;
             IsPlayerActiveInThisTeam = isPlayerActiveInThisTeam;
+
+            LogToFile($"PlayersPage megnyitva - Admin: {IsAdmin}, TeamId: {TeamId}");
 
             if (IsAdmin)
             {
@@ -143,6 +146,9 @@ namespace LoL_eSport_Team_Mangager
                     context.SaveChanges();
 
                     MessageBox.Show($"Játékos sikeresen mentve:\nNév: {name}\nPozíció: {position}");
+
+                    LogToFile($"Új játékos hozzáadva: {name}, Pozíció: {position}, TeamId: {TeamId}");
+
                 }
 
                 // Clear form
@@ -178,6 +184,8 @@ namespace LoL_eSport_Team_Mangager
                             string playerName = player.Name ?? "(ismeretlen név)";
                             MessageBox.Show($"A(z) {playerName} játékos inaktiválva lett.");
 
+                            LogToFile($"Játékos inaktiválva: {playerName}, PlayerId: {player.Id}, TeamId: {TeamId}");
+
                             LoadPlayersForSelectedTeam();
                             PlayerListComboBox.SelectedIndex = -1;
                         }
@@ -196,6 +204,13 @@ namespace LoL_eSport_Team_Mangager
             {
                 MessageBox.Show("Kérlek, válassz ki egy játékost a törléshez.");
             }
+        }
+
+        private void LogToFile(string message)
+        {
+            string logFilePath = "playersPage_log.txt";
+            string logEntry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
+            File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
         }
     }
 }

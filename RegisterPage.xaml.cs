@@ -13,39 +13,92 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using cnTeamManager;
+using System.Windows.Media.Imaging;
 using TeamManagerContext;
+using static System.Net.WebRequestMethods;
 
 namespace LoL_eSport_Team_Mangager
 {
-    /// <summary>
-    /// Interaction logic for RegisterPage.xaml
-    /// </summary>
     public partial class RegisterPage : Page
     {
-        public RegisterPage()
+        private cnTeamManager.TeamManagerContext context; // itt már helyesen használjuk a TeamManagerContext típust
+
+
+
+        private Dictionary<string, List<string>> regionLeagues = new Dictionary<string, List<string>>
+        {
+            { "EU", new List<string> { "LEC" } },
+            { "KR", new List<string> { "LCK" } },
+            { "NA", new List<string> { "LCS" } },
+            { "CH", new List<string> { "LPL" } },
+            { "LAN", new List<string> { "LLA" } }
+        };
+
+        private List<string> logoUrls = new List<string>
+        {
+            "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/7/79/PlacementIcon1.png/revision/latest/scale-to-width-down/1000?cb=20201021171046",
+            "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/3/34/Skin_Loading_Screen_Oktoberfest_Gragas.jpg/revision/latest?cb=20191214204052",
+            "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a0/Rune_Conqueror.png/revision/latest?cb=20180320191055",
+            "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d9/Logo_square.png/revision/latest?cb=20191217012447"
+        };
+
+        public RegisterPage(string username)
         {
             InitializeComponent();
+            context = new cnTeamManager.TeamManagerContext(); // Az új példányosítás itt helyes
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            LogoSelectorListBox.ItemsSource = logoUrls;
+            UserDeleteComboBox.ItemsSource = context.Users.Select(u => u.Username).ToList();
+        }
+
+        private void RegionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (RegionComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string selectedRegion = selectedItem.Content.ToString();
+                if (regionLeagues.TryGetValue(selectedRegion, out List<string> leagues))
+                {
+                    LeagueComboBox.ItemsSource = leagues;
+                    LeagueComboBox.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void LogoSelectorListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LogoSelectorListBox.SelectedItem is string selectedUrl)
+            {
+                LogoUrlTextBox.Text = selectedUrl;
+            }
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            string username = UsernameTextBox.Text.Trim();
-            string rawPassword = PasswordBox.Password;
-            string hashedPassword = PasswordHelper.HashPassword(rawPassword);
-            bool isAdmin = IsAdminCheckBox.IsChecked == true;
-
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(rawPassword))
+            try
             {
-                MessageBox.Show("Kérjük, töltsön ki minden mezőt!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                string username = UsernameTextBox.Text.Trim();
+                string rawPassword = PasswordBox.Password;
+                string hashedPassword = PasswordHelper.HashPassword(rawPassword);
+                bool isAdmin = IsAdminCheckBox.IsChecked == true;
+                string teamName = TeamNameTextBox.Text.Trim();
+                string region = (RegionComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+                string league = LeagueComboBox.SelectedItem as string;
+                string logoUrl = LogoUrlTextBox.Text.Trim();
 
-            using (var context = new cnTeamManager.TeamManagerContext())
-            {
-                // Check if user already exists
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(rawPassword) ||
+                    string.IsNullOrEmpty(teamName) || string.IsNullOrEmpty(region) ||
+                    string.IsNullOrEmpty(league) || string.IsNullOrEmpty(logoUrl))
+                {
+                    MessageBox.Show("Minden mezőt ki kell tölteni.");
+                    return;
+                }
+
                 if (context.Users.Any(u => u.Username == username))
                 {
-                    MessageBox.Show("Ez a felhasználónév már létezik!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Ez a felhasználónév már létezik.");
                     return;
                 }
 
@@ -57,21 +110,46 @@ namespace LoL_eSport_Team_Mangager
                 };
 
                 context.Users.Add(newUser);
+                context.SaveChanges(); // előbb mentjük, hogy legyen UserId
+
+                var newTeam = new Teams
+                {
+                    Name = teamName,
+                    Region = region,
+                    League = league,
+                    LogoURL = logoUrl,
+                    CoachId = newUser.UserId // Kapcsolat beállítása
+                };
+
+                context.Teams.Add(newTeam);
                 context.SaveChanges();
 
-                MessageBox.Show("Sikeres regisztráció!", "Kész", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // Optional: navigate back to dashboard or clear form
-
-                UsernameTextBox.Text = string.Empty;
-                PasswordBox.Password = string.Empty;
-                IsAdminCheckBox.IsChecked = false;
+                MessageBox.Show("Sikeres regisztráció!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hiba történt: " + ex.Message);
             }
         }
 
         private void DeleteUserFromDatabase_Click(object sender, RoutedEventArgs e)
         {
+            if (UserDeleteComboBox.SelectedItem is string username)
+            {
+                var userToDelete = context.Users.FirstOrDefault(u => u.Username == username);
+                if (userToDelete != null)
+                {
+                    var teams = context.Teams.Where(t => t.Users.Username == username).ToList();
+                    context.Teams.RemoveRange(teams);
 
+                    context.Users.Remove(userToDelete);
+                    context.SaveChanges();
+                    MessageBox.Show("Felhasználó törölve.");
+
+                    UserDeleteComboBox.ItemsSource = context.Users.Select(u => u.Username).ToList();
+                    UserDeleteComboBox.SelectedIndex = -1;
+                }
+            }
         }
     }
 }

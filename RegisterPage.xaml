@@ -6,19 +6,65 @@
       xmlns:local="clr-namespace:LoL_eSport_Team_Mangager"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="RegisterPage">
+      Title="RegisterPage"
+      Loaded="Page_Loaded">
 
-    <Grid Margin="20">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-            <TextBlock Text="Új felhasználó létrehozása" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+    <Page.Resources>
+        <local:UrlToImageSourceConverter x:Key="UrlToImageConverter"/>
+    </Page.Resources>
 
-            <TextBox x:Name="UsernameTextBox" Margin="0,5"/>
-            <PasswordBox x:Name="PasswordBox" Margin="0,5"/>
-            <CheckBox x:Name="IsAdminCheckBox" Content="Admin?" Margin="0,10"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+                <TextBlock Text="Új felhasználó létrehozása" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
-            <Button Content="Regisztráció" Click="RegisterButton_Click" Margin="0,20"/>
+                <TextBlock Text="Felhasználónév:"/>
+                <TextBox x:Name="UsernameTextBox" Margin="0,5"/>
 
-            <Button Content="Törlés" Click="DeleteUserFromDatabase_Click" Margin="0,20"/>
-        </StackPanel>
-    </Grid>
+                <TextBlock Text="Jelszó:"/>
+                <PasswordBox x:Name="PasswordBox" Margin="0,5"/>
+
+                <CheckBox x:Name="IsAdminCheckBox" Content="Admin?" Margin="0,10"/>
+
+                <TextBlock Text="Csapat név:"/>
+                <TextBox x:Name="TeamNameTextBox" Margin="0,5"/>
+
+                <TextBlock Text="Régió:"/>
+                <ComboBox x:Name="RegionComboBox" Margin="0,5" SelectionChanged="RegionComboBox_SelectionChanged">
+                    <ComboBoxItem Content="EU"/>
+                    <ComboBoxItem Content="KR"/>
+                    <ComboBoxItem Content="NA"/>
+                    <ComboBoxItem Content="CH"/>
+                    <ComboBoxItem Content="LAN"/>
+                </ComboBox>
+
+                <TextBlock Text="Liga:"/>
+                <ComboBox x:Name="LeagueComboBox" Margin="0,5"/>
+
+                <TextBlock Text="Válassz csapat logót:" Margin="0,10"/>
+                <ListBox x:Name="LogoSelectorListBox" Height="100" SelectionChanged="LogoSelectorListBox_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Converter={StaticResource UrlToImageConverter}}" Width="64" Height="64" Margin="5"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <TextBox x:Name="LogoUrlTextBox" Visibility="Collapsed"/>
+
+                <Button Content="Regisztráció" Click="RegisterButton_Click" Margin="0,20"/>
+
+                <Separator Margin="0,20"/>
+
+                <TextBlock Text="Felhasználó törlése" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                <ComboBox x:Name="UserDeleteComboBox" Margin="0,5"/>
+                <Button Content="Törlés" Click="DeleteUserFromDatabase_Click" Margin="0,10"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Page>

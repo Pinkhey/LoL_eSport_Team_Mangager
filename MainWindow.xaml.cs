@@ -78,7 +78,7 @@ namespace LoL_eSport_Team_Manager
 
         private void AddCoachButton_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new RegisterPage());
+            MainFrame.Navigate(new RegisterPage(LoggedInUsername));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Linq;
 using cnTeamManager;
 using LoL_eSport_Team_Mangager;
+using System.IO;
 
 namespace LoL_eSport_Team_Manager
 {
@@ -68,6 +69,8 @@ namespace LoL_eSport_Team_Manager
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
+            LogToFile($"Felhasználó {LoggedInUsername} kijelentkezett.");
+
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.Show();
             this.Close();
@@ -99,6 +102,13 @@ namespace LoL_eSport_Team_Manager
         {
             BackgroundVideo.Position = TimeSpan.Zero;
             BackgroundVideo.Play();
+        }
+
+        private void LogToFile(string message)
+        {
+            string logFilePath = "login_log.txt"; // this is the same log file used before
+            string logEntry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
+            System.IO.File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
         }
     }
 }

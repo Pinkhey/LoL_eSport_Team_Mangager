@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -51,6 +52,8 @@ namespace LoL_eSport_Team_Mangager
                 {
                     bool isAdmin = user.IsAdmin;
 
+                    LogToFile($"Sikeres bejelentkezés: {username}");
+
                     // Try to find the team associated with this coach
                     var team = context.Teams.FirstOrDefault(t => t.CoachId == user.UserId);
 
@@ -73,6 +76,7 @@ namespace LoL_eSport_Team_Mangager
                 }
                 else
                 {
+                    LogToFile($"Sikertelen bejelentkezési próbálkozás: {username}");
                     MessageBox.Show("Hibás felhasználónév vagy jelszó!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -91,6 +95,13 @@ namespace LoL_eSport_Team_Mangager
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Window.GetWindow(this)?.Close();
+        }
+
+        private void LogToFile(string message)
+        {
+            string logFilePath = "login_log.txt"; // a program mappájában lesz
+            string logEntry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
+            File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
         }
     }
 }

@@ -138,6 +138,16 @@ namespace LoL_eSport_Team_Mangager
             {
                 using (var context = new cnTeamManager.TeamManagerContext())
                 {
+
+                    bool nameExists = context.Players.Any(p => p.TeamId == TeamId && p.IsPlayerActiveInThisTeam == true && p.Name == name);
+
+                    if (nameExists)
+                    {
+                        MessageBox.Show("Már létezik ilyen nevű aktív játékos ebben a csapatban!", "Duplikált név", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        LogToFile($"Sikertelen mentés: duplikált játékosnév ({name}) a TeamId: {TeamId} csapatban.");
+                        return;
+                    }
+
                     var newPlayer = new Players
                     {
                         Name = name,

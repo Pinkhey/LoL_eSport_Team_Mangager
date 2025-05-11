@@ -96,6 +96,83 @@ namespace LoL_eSport_Team_Mangager
                     NextMatchDateText.Text = "Időpont: ismeretlen";
                     NextMatchHighlightPlayerText.Text = "Kiemelt játékos: ismeretlen";
                 }
+
+                // === Játékosok átlagos KDA-ja ===
+                KdaListPanel.Children.Clear();
+
+                var playersInTeam = context.Players
+                    .Where(p => p.TeamId == team.Id)
+                    .Select(p => new { p.Id, p.Name })
+                    .ToList();
+
+                foreach (var player in playersInTeam)
+                {
+                    var kdaValues = context.PlayerStats
+                        .Where(ps => ps.PlayerId == player.Id && ps.KDA.HasValue)
+                        .Select(ps => ps.KDA.Value)
+                        .ToList();
+
+                    string kdaText;
+
+                    if (kdaValues.Count > 0)
+                    {
+                        var avgKda = kdaValues.Average();
+                        kdaText = $"KDA: {Math.Round(avgKda, 2)}";
+                    }
+                    else
+                    {
+                        kdaText = "KDA: ismeretlen";
+                    }
+
+                    var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 5, 0, 0) };
+                    row.Children.Add(new TextBlock
+                    {
+                        Text = player.Name,
+                        Width = 150,
+                        Foreground = (Brush)FindResource("LoLTextBrush")
+                    });
+                    row.Children.Add(new TextBlock
+                    {
+                        Text = kdaText,
+                        Foreground = Brushes.LimeGreen
+                    });
+
+                    KdaListPanel.Children.Add(row);
+                }
+                LastMatchInfoText.Text = "Meccs: ismeretlen";
+                LastMatchStats1.Text = "";
+                LastMatchStats2.Text = "";
+                LastMatchStats3.Text = "";
+
+                var lastMatch = context.Matches
+                    .Where(m => m.TeamId == team.Id && m.Date <= DateTime.Now)
+                    .OrderByDescending(m => m.Date)
+                    .FirstOrDefault();
+
+                if (lastMatch != null)
+                {
+                    var opponent = context.Teams.FirstOrDefault(t => t.Id == lastMatch.OpponentId);
+                    LastMatchInfoText.Text = $"Meccs #{lastMatch.Id} - {team.Name} vs {opponent?.Name ?? "ismeretlen"}";
+
+                    var playerStats = context.PlayerStats
+                        .Where(ps => ps.MatchId == lastMatch.Id)
+                        .Join(context.Players.Where(p => p.TeamId == team.Id),
+                              ps => ps.PlayerId,
+                              p => p.Id,
+                              (ps, p) => new { p.Name, ps.Score, ps.Form }) // Score és Form értékeket mutatunk
+                        .ToList();
+
+                    if (playerStats.Count >= 1)
+                        LastMatchStats1.Text = $"{playerStats[0].Name}: Score: {playerStats[0].Score}, Form: {playerStats[0].Form}";
+                    if (playerStats.Count >= 2)
+                        LastMatchStats2.Text = $"{playerStats[1].Name}: Score: {playerStats[1].Score}, Form: {playerStats[1].Form}";
+                    if (playerStats.Count >= 3)
+                        LastMatchStats3.Text = $"{playerStats[2].Name}: Score: {playerStats[2].Score}, Form: {playerStats[2].Form}";
+                }
+                else
+                {
+                    LastMatchInfoText.Text = "Nincs lejátszott meccs";
+                }
             }
         }
 

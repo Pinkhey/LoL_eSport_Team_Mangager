@@ -101,6 +101,13 @@ namespace LoL_eSport_Team_Mangager
                 PlayerNameTextBox.Text = "";
                 PlayerPositionComboBox.SelectedIndex = -1;
                 PlayerForm.Visibility = Visibility.Collapsed;
+
+                if (IsAdmin)
+                {
+                    TeamSelectorComboBox.SelectedIndex = -1;
+                    TeamSelectorComboBox.Text = string.Empty; // Optional UI refresh
+                    TeamId = null;
+                }
             }
             else
             {

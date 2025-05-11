@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeamManagerContext;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -25,6 +26,8 @@ namespace LoL_eSport_Team_Mangager
 
         public bool IsAdmin { get; set; }
 
+        public bool IsPlayerActiveInThisTeam { get; set; }
+
         public PlayersPage(int? teamId, bool isAdmin = false)
         {
             InitializeComponent();
@@ -36,6 +39,8 @@ namespace LoL_eSport_Team_Mangager
                 AdminTeamSelectorPanel.Visibility = Visibility.Visible;
                 LoadTeamsForAdmin();
             }
+
+            LoadPlayersForSelectedTeam();
         }
 
         private void LoadTeamsForAdmin()
@@ -54,6 +59,24 @@ namespace LoL_eSport_Team_Mangager
             if (TeamSelectorComboBox.SelectedValue is int selectedId)
             {
                 TeamId = selectedId;
+                LoadPlayersForSelectedTeam();
+            }
+        }
+
+        private void LoadPlayersForSelectedTeam()
+        {
+            if (TeamId == null) return;
+
+            using (var context = new cnTeamManager.TeamManagerContext())
+            {
+                var players = context.Players
+                    .Where(p => p.TeamId == TeamId)
+                    .Select(p => new { p.Id, p.Name })
+                    .ToList();
+
+                PlayerListComboBox.ItemsSource = players;
+                PlayerListComboBox.DisplayMemberPath = "Name";
+                PlayerListComboBox.SelectedValuePath = "Id";
             }
         }
 
@@ -108,6 +131,8 @@ namespace LoL_eSport_Team_Mangager
                     TeamSelectorComboBox.Text = string.Empty; // Optional UI refresh
                     TeamId = null;
                 }
+
+                LoadPlayersForSelectedTeam();
             }
             else
             {
@@ -117,7 +142,34 @@ namespace LoL_eSport_Team_Mangager
 
         private void DeletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Játékos törölve");
+            if (PlayerListComboBox.SelectedValue is int playerId)
+            {
+                using (var context = new cnTeamManager.TeamManagerContext())
+                {
+                    var player = context.Players
+                                         .Where(p => p.TeamId == TeamId && p.IsPlayerActiveInThisTeam)
+                                         .Select(p => new { p.Id, p.Name })
+                                         .ToList();
+
+                    if (player != null)
+                    {
+                        player.IsPlayerActiveInThisTeam = false; // Soft delete
+                        context.SaveChanges();
+                        MessageBox.Show($"A(z) {player.Name} játékos inaktiválva lett.");
+
+                        LoadPlayersForSelectedTeam(); // Refresh list
+                        PlayerListComboBox.SelectedIndex = -1; // Clear selection
+                    }
+                    else
+                    {
+                        MessageBox.Show("A kiválasztott játékos nem található.");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Kérlek, válassz ki egy játékost a törléshez.");
+            }
         }
     }
 }

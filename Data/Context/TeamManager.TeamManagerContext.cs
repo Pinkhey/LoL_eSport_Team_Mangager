@@ -89,6 +89,12 @@ namespace cnTeamManager
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Players>()
+                .Property(p => p.PhotoURL)
+                .HasDefaultValue("https://practice365.co.uk/uploads/sites/1005/2023/03/Default-Profile-Picture-Transparent.png")
+                .ValueGeneratedOnAdd();
+
+
             this.UsersMapping(modelBuilder);
             this.CustomizeUsersMapping(modelBuilder);
 

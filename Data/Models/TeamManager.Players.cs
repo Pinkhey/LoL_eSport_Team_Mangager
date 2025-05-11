@@ -34,7 +34,7 @@ namespace TeamManagerContext
 
         public virtual int TeamId { get; set; }
 
-        public string PhotoURL { get; set; }
+        public string? PhotoURL { get; set; }
 
         public bool? IsPlayerActiveInThisTeam { get; set; }
 

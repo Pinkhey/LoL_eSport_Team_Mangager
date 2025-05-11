@@ -112,12 +112,16 @@ namespace LoL_eSport_Team_Mangager
 
             if (string.IsNullOrWhiteSpace(name))
             {
+                string error = "Hibás adatbevitel: játékos neve üres.";
+                LogToFile(error);
                 MessageBox.Show("Kérlek, add meg a játékos nevét!");
                 return;
             }
 
             if (PlayerPositionComboBox.SelectedItem == null)
             {
+                string error = "Hibás adatbevitel: nincs pozíció kiválasztva.";
+                LogToFile(error);
                 MessageBox.Show("Kérlek, válassz pozíciót!");
                 return;
             }
@@ -161,6 +165,7 @@ namespace LoL_eSport_Team_Mangager
             }
             catch (Exception ex)
             {
+                LogToFile($"Hiba játékos mentése közben: {ex.Message}");
                 MessageBox.Show($"Hiba mentés közben: {ex.Message}");
             }
         }
@@ -197,11 +202,14 @@ namespace LoL_eSport_Team_Mangager
                 }
                 catch (Exception ex)
                 {
+                    LogToFile($"Hiba játékos törlésekor: {ex.Message}");
                     MessageBox.Show($"Hiba a játékos törlésekor: {ex.Message}");
                 }
             }
             else
             {
+                string error = "Hibás művelet: nem választottak ki játékost törléshez.";
+                LogToFile(error);
                 MessageBox.Show("Kérlek, válassz ki egy játékost a törléshez.");
             }
         }

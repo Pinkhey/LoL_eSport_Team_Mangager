@@ -54,6 +54,40 @@ namespace LoL_eSport_Team_Mangager
         }
 
 
+        private void TeamSelectorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TeamSelectorComboBox.SelectedValue is int selectedId)
+            {
+                TeamId = selectedId;
+                LoadPlayersForSelectedTeam();
+            }
+        }
+
+        private void LoadPlayersForSelectedTeam()
+        {
+            if (TeamId == null) return;
+
+            try
+            {
+                using (var context = new cnTeamManager.TeamManagerContext())
+                {
+                    var players = context.Players
+                        .Where(p => p.TeamId == TeamId && p.IsPlayerActiveInThisTeam == true)
+                        .Select(p => new { p.Id, p.Name })
+                        .ToList();
+
+                    PlayerListComboBox.ItemsSource = players;
+                    PlayerListComboBox.DisplayMemberPath = "Name";
+                    PlayerListComboBox.SelectedValuePath = "Id";
+                    LoadPlayers();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Hiba játékosok betöltésekor");
+                MessageBox.Show($"Hiba a játékosok betöltésekor: {ex.Message}");
+            }
+        }
 
         private void LoadPlayers()
         {

@@ -12,6 +12,7 @@ using System.Linq;
 using cnTeamManager;
 using LoL_eSport_Team_Mangager;
 using System.IO;
+using System;
 
 namespace LoL_eSport_Team_Manager
 {
@@ -50,16 +51,14 @@ namespace LoL_eSport_Team_Manager
             }
             else
             {
-                var playersPage = new PlayersPage(LoggedInCoachTeamId /*?? 0*/); // 0 if admin (just for default, can be improved)
+                var playersPage = new PlayersPage(LoggedInCoachTeamId);
                 MainFrame.Navigate(playersPage);
             }
-
-            
         }
 
         private void Matches_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new MatchesPage(LoggedInUserId, IsUserAdmin));
+            MainFrame.Navigate(new MatchesPage(LoggedInCoachTeamId, IsUserAdmin));
         }
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
@@ -83,16 +82,37 @@ namespace LoL_eSport_Team_Manager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string coachName = UsernameDisplay.Text; // vagy vmi változóból, ha ott van a név
+            string coachName = UsernameDisplay.Text;
             MainFrame.Navigate(new Pages.WelcomePage(LoggedInUsername));
-
 
             // Hide AddCoachButton for non-admin users
             if (!IsUserAdmin)
             {
                 AddCoachButton.Visibility = Visibility.Collapsed;
             }
+
+            // Töltsük be a csapat logóját, ha van hozzá tartozó TeamId
+            try
+            {
+                if (LoggedInCoachTeamId.HasValue)
+                {
+                    using (var context = new cnTeamManager.TeamManagerContext())
+                    {
+                        var team = context.Teams.FirstOrDefault(t => t.Id == LoggedInCoachTeamId.Value);
+                        if (team != null && !string.IsNullOrWhiteSpace(team.LogoURL))
+                        {
+                            TeamLogoImage.Source = new BitmapImage(new Uri(team.LogoURL));
+                            TeamLogoImage.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Hiba a csapat logó betöltésekor: " + ex.Message);
+            }
         }
+
         private void BackgroundVideo_Loaded(object sender, RoutedEventArgs e)
         {
             BackgroundVideo.Play();

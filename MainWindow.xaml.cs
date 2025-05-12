@@ -64,7 +64,7 @@ namespace LoL_eSport_Team_Manager
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new StatisticsPage());
+            MainFrame.Navigate(new StatisticsPage(LoggedInCoachTeamId, IsUserAdmin));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

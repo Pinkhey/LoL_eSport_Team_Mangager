@@ -12,17 +12,151 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LoL_eSport_Team_Manager;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using System.Collections.ObjectModel;
+using cnTeamManager;
 
 namespace LoL_eSport_Team_Mangager
 {
-    /// <summary>
-    /// Interaction logic for StatisticsPage.xaml
-    /// </summary>
     public partial class StatisticsPage : Page
     {
-        public StatisticsPage()
+        public ObservableCollection<ISeries> KdaColumnSeries { get; set; }
+        public Axis[] KdaXAxis { get; set; }
+
+        public ObservableCollection<ISeries> FormSeries { get; set; }
+        public ObservableCollection<ISeries> WinLossSeries { get; set; }
+
+        public int? TeamId { get; set; }
+        public bool IsAdmin { get; set; }
+
+        public StatisticsPage(int? teamId, bool isAdmin = false)
         {
             InitializeComponent();
+            TeamId = teamId;
+            IsAdmin = isAdmin;
+
+            Logger.Log($"StatisticsPage megnyitva - Admin: {IsAdmin}, TeamId: {TeamId}", "INFO", "StatisticsPage");
+
+            if (IsAdmin)
+            {
+                TeamSelector.Visibility = Visibility.Visible;
+                LoadTeams();
+            }
+
+            LoadStatistics();
+        }
+
+        private void LoadTeams()
+        {
+            try
+            {
+                using var context = new cnTeamManager.TeamManagerContext();
+                var teams = context.Teams
+                                   .Select(t => new { t.Id, t.Name })
+                                   .ToList();
+                TeamSelector.ItemsSource = teams;
+                TeamSelector.DisplayMemberPath = "Name";
+                TeamSelector.SelectedValuePath = "Id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a csapatok betöltésekor: {ex.Message}");
+            }
+        }
+
+        private void TeamSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TeamSelector.SelectedValue is int selectedId)
+            {
+                TeamId = selectedId;
+                LoadStatistics();
+            }
+        }
+
+        private void LoadStatistics()
+        {
+            if (TeamId == null) return;
+
+            try
+            {
+                using var context = new cnTeamManager.TeamManagerContext();
+
+                // Játékos statisztikák betöltése
+                var stats = (from player in context.Players
+                             where player.TeamId == TeamId && player.IsPlayerActiveInThisTeam == true
+                             join stat in context.PlayerStats on player.Id equals stat.PlayerId
+                             join match in context.Matches on stat.MatchId equals match.Id
+                             select new
+                             {
+                                 Name = player.Name,
+                                 Role = player.Role,
+                                 KDA = stat.KDA,
+                                 Score = stat.Score,
+                                 Form = stat.Form,
+                                 MatchId = match.Id
+                             })
+                             .ToList();
+
+                StatsDataGrid.ItemsSource = stats;
+
+                // Átlagos KDA oszlopdiagram
+                var avgKdas = stats
+                    .GroupBy(s => s.Name)
+                    .Select(g => new { Name = g.Key, AvgKDA = g.Average(s => s.KDA) ?? 0 })
+                    .ToList();
+
+                KdaColumnSeries = new ObservableCollection<ISeries>
+                {
+                    new ColumnSeries<double>
+                    {
+                        Values = avgKdas.Select(x => x.AvgKDA).ToArray(),
+                        Name = "KDA"
+                    }
+                };
+
+                KdaXAxis = new[]
+                {
+                    new Axis { Labels = avgKdas.Select(x => x.Name).ToArray() }
+                };
+
+                // Vonaldiagram: Forma alakulása játékosonként
+                FormSeries = new ObservableCollection<ISeries>();
+                var groupedForm = stats.GroupBy(s => s.Name);
+                foreach (var group in groupedForm)
+                {
+                    FormSeries.Add(new LineSeries<double>
+                    {
+                        Name = group.Key,
+                        Values = group.Select(s => (double)s.Form).ToArray()
+                    });
+                }
+
+                // Kördiagram: Win/Loss arány meccsenként egyszer számolva
+                var matchResults = context.Matches
+                    .Where(m => m.TeamId == TeamId)
+                    .Select(m => m.Result)
+                    .Distinct()  // bár Result stringek, distinct a meccsenkénti duplikáció ellen
+                    .ToList();
+
+                int wins = context.Matches.Count(m => m.TeamId == TeamId && m.Result == "Win");
+                int losses = context.Matches.Count(m => m.TeamId == TeamId && m.Result == "Loss");
+
+                WinLossSeries = new ObservableCollection<ISeries>
+                {
+                    new PieSeries<double> { Values = new[] { (double)wins }, Name = "Win" },
+                    new PieSeries<double> { Values = new[] { (double)losses }, Name = "Loss" }
+                };
+
+                // Adatkötések frissítése
+                DataContext = null;
+                DataContext = this;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a statisztikák betöltésekor: {ex.Message}");
+            }
         }
     }
 }

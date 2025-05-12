@@ -88,8 +88,8 @@ namespace LoL_eSport_Team_Mangager
 
         public string ResultText => Result switch
         {
-            "Win" => "W",
-            "Lose" => "L",
+            "Win" => "Win",
+            "Lose" => "Lose",
             _ => "-"
         };
 
@@ -98,6 +98,13 @@ namespace LoL_eSport_Team_Mangager
             "Win" => Brushes.Green,
             "Lose" => Brushes.Red,
             _ => Brushes.Gray
+        };
+
+        public Brush CardBackground => Result switch
+        {
+            "Win" => Brushes.LightGreen,
+            "Lose" => Brushes.LightCoral,
+            _ => Brushes.LightGray
         };
     }
 }

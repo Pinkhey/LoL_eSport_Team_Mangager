@@ -76,7 +76,7 @@
                                    FontSize="16"
                                    Margin="10,0"/>
 
-                        <Button Content="Edző hozzáadása"
+                        <Button Content="Edző hozzáadása/törlése"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Foreground="White"
                                 Margin="10,0"

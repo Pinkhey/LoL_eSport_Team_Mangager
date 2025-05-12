@@ -20,6 +20,7 @@ namespace LoL_eSport_Team_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly cnTeamManager.TeamManagerContext _context = new cnTeamManager.TeamManagerContext();
         public string? LoggedInUsername { get; set; }
         public bool IsUserAdmin { get; set; }
         public int LoggedInUserId { get; set; }
@@ -64,7 +65,16 @@ namespace LoL_eSport_Team_Manager
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new StatisticsPage(LoggedInCoachTeamId, IsUserAdmin));
+            if (LoggedInCoachTeamId == null && !IsUserAdmin)
+            {
+                MessageBox.Show("Nem tartozik csapat ehhez a felhasználóhoz.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            int teamId = LoggedInCoachTeamId ?? 0; // 0 = Admin (összes csapat)
+
+            var statisticsPage = new StatisticsPage(_context, teamId);
+            MainFrame.Navigate(statisticsPage);
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

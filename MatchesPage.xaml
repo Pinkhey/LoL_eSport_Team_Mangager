@@ -4,36 +4,44 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LoL_eSport_Team_Mangager"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MatchesPage">
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <ItemsControl ItemsSource="{Binding Matches}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10" CornerRadius="5">
-                        <StackPanel HorizontalAlignment="Center" Width="150">
-                            <!-- Dátum -->
-                            <TextBlock Text="{Binding MatchDate, StringFormat='{}{0:yyyy.MM.dd}'}" 
+                    <materialDesign:Card Background="LightGray"
+                     Padding="0"
+                     Margin="10"
+                     materialDesign:ElevationAssist.Elevation="Dp2">
+                        <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10" CornerRadius="5">
+                            <StackPanel HorizontalAlignment="Center" Width="150">
+
+                                <!-- Dátum -->
+                                <TextBlock Text="{Binding MatchDate, StringFormat='{}{0:yyyy.MM.dd}'}" 
                                        FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5"/>
 
-                            <!-- Kép (csapat logó) -->
-                            <Image Width="80" Height="80" Stretch="Uniform"
+                                <!-- Kép (csapat logó) -->
+                                <Image Width="80" Height="80" Stretch="Uniform"
                                    Source="{Binding LogoUrl}" Margin="0,0,0,5"/>
 
-                            <!-- Csapat neve -->
-                            <TextBlock Text="{Binding TeamName}" 
+                                <!-- Csapat neve -->
+                                <TextBlock Text="{Binding TeamName}" 
                                        FontSize="14" FontWeight="SemiBold" 
                                        HorizontalAlignment="Center" Margin="0,0,0,2"/>
 
-                            <!-- Eredmény -->
-                            <TextBlock Text="{Binding ResultText}" 
+                                <!-- Eredmény -->
+                                <TextBlock Text="{Binding ResultText}" 
                                        Foreground="{Binding ResultColor}" 
                                        FontSize="18" FontWeight="Bold"
                                        HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+
+                            </StackPanel>
+                        </Border>
+                    </materialDesign:Card>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 

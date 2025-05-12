@@ -3,41 +3,105 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:LoL_eSport_Team_Mangager"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="900"
       Title="PlayersPage">
 
-    <Grid Margin="20">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+    <Grid Background="Transparent" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <Button Content="Új játékos hozzáadása" Click="AddPlayer_Click" Margin="0,20"/>
+        <!-- Játékos kártyák -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+            <WrapPanel x:Name="PlayersCardPanel" Margin="10" IsItemsHost="False" HorizontalAlignment="Center"/>
+        </ScrollViewer>
 
-            <StackPanel x:Name="AdminTeamSelectorPanel" Visibility="Collapsed" Margin="10">
-                <TextBlock Text="Válassz csapatot:" FontWeight="Bold" />
-                <ComboBox x:Name="TeamSelectorComboBox" SelectionChanged="TeamSelectorComboBox_SelectionChanged" />
-            </StackPanel>
+        <!-- Gombok alul -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Margin="0,20">
+            <Button Content="Új játékos hozzáadása"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Background="{StaticResource LoLAccentBrush}"
+                    Foreground="{StaticResource LoLTextBrush}"
+                    Height="40" Width="200"
+                    Margin="10,0"
+                    Click="AddPlayer_Click"/>
 
-            <StackPanel Name="PlayerForm" Visibility="Collapsed" Margin="0,20">
-                <TextBlock Text="Név:"/>
-                <TextBox Name="PlayerNameTextBox" Margin="0,5"/>
-                <TextBlock Text="Pozíció:"/>
-                <ComboBox Name="PlayerPositionComboBox" Margin="0,5">
-                    <ComboBoxItem Content="Top"/>
-                    <ComboBoxItem Content="Jungle"/>
-                    <ComboBoxItem Content="Mid"/>
-                    <ComboBoxItem Content="ADC"/>
-                    <ComboBoxItem Content="Support"/>
-                </ComboBox>
-                <Button Content="Mentés" Click="SavePlayer_Click" Margin="0,10"/>
-            </StackPanel>
+            <Button Content="Játékos törlése"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Background="{StaticResource LoLAccentBrush}"
+                    Foreground="{StaticResource LoLTextBrush}"
+                    Height="40" Width="200"
+                    Margin="10,0"
+                    Click="ToggleDeletePlayerForm"/>
+        </StackPanel>
 
-            <!-- Player selector for deletion -->
-            <TextBlock Text="Válassz játékost törléshez:" Margin="0,10"/>
-            <ComboBox x:Name="PlayerListComboBox" Width="200" Margin="0,5"/>
+        <!-- Formok alul rejtve -->
+        <StackPanel Grid.Row="2" Margin="20" HorizontalAlignment="Center">
 
-            <Button Content="Játékos törlése" Click="DeletePlayer_Click" Margin="0,20"/>
+            <materialDesign:Card x:Name="PlayerForm" Visibility="Collapsed"
+                                 Background="{StaticResource LoLSecondaryBrush}"
+                                 Margin="0,0,0,20" Width="400">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Új játékos hozzáadása"
+                               FontSize="20" FontWeight="Bold"
+                               Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
 
+                    <TextBox x:Name="PlayerNameTextBox"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Background="{StaticResource LoLPrimaryBrush}"
+                             Foreground="{StaticResource LoLTextBrush}"
+                             materialDesign:HintAssist.Hint="Név"
+                             Margin="0,0,0,10"/>
+
+                    <ComboBox x:Name="PlayerPositionComboBox"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Background="{StaticResource LoLPrimaryBrush}"
+                              Foreground="{StaticResource LoLTextBrush}"
+                              materialDesign:HintAssist.Hint="Pozíció"
+                              Margin="0,0,0,20">
+                        <ComboBoxItem Content="Top"/>
+                        <ComboBoxItem Content="Jungle"/>
+                        <ComboBoxItem Content="Mid"/>
+                        <ComboBoxItem Content="ADC"/>
+                        <ComboBoxItem Content="Support"/>
+                    </ComboBox>
+
+                    <Button Content="Mentés"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Background="{StaticResource LoLAccentBrush}"
+                            Foreground="{StaticResource LoLTextBrush}"
+                            Height="40" Width="200"
+                            Click="SavePlayer_Click"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card x:Name="DeleteForm" Visibility="Collapsed"
+                                 Background="{StaticResource LoLPrimaryBrush}"
+                                 Margin="0,0,0,20" Width="400">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Játékos törlése"
+                               FontSize="20" FontWeight="Bold"
+                               Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+
+                    <ComboBox x:Name="PlayerListComboBox"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Background="{StaticResource LoLPrimaryBrush}"
+                              Foreground="{StaticResource LoLTextBrush}"
+                              materialDesign:HintAssist.Hint="Válassz játékost"
+                              Margin="0,0,0,20"/>
+
+                    <Button Content="Törlés"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Background="{StaticResource LoLAccentBrush}"
+                            Foreground="{StaticResource LoLTextBrush}"
+                            Height="40" Width="200"
+                            Click="DeletePlayer_Click"/>
+                </StackPanel>
+            </materialDesign:Card>
         </StackPanel>
     </Grid>
 </Page>

@@ -25,6 +25,7 @@ namespace LoL_eSport_Team_Mangager
         {
             using (var context = new cnTeamManager.TeamManagerContext())
             {
+                // === Edzői adatok kártya ===
                 var coach = context.Users
                     .FirstOrDefault(u => u.Username.ToLower() == _username.ToLower());
 
@@ -62,7 +63,7 @@ namespace LoL_eSport_Team_Mangager
 
                 AverageKdaText.Text = $"Csapat átlagos KDA: {Math.Round(averageKDA, 2)}";
 
-                // === Következő meccs ===
+                // === Következő meccs kártya ===
                 var upcomingMatch = context.Matches
                 .Where(m => m.TeamId == team.Id && m.Date > DateTime.Now)
                 .OrderBy(m => m.Date)
@@ -89,7 +90,6 @@ namespace LoL_eSport_Team_Mangager
                         .Where(ps => ps.MatchId == upcomingMatch.Id && playerIdsForTeam.Contains(ps.PlayerId))
                         .ToList();
                 }
-                
                 else
                 {
                     NextMatchOpponentText.Text = "Ellenfél: ismeretlen";
@@ -97,7 +97,7 @@ namespace LoL_eSport_Team_Mangager
                     NextMatchHighlightPlayerText.Text = "Kiemelt játékos: ismeretlen";
                 }
 
-                // === Játékosok átlagos KDA-ja ===
+                // === Játékosok átlagos KDA-ja kártya ===
                 KdaListPanel.Children.Clear();
 
                 var playersInTeam = context.Players
@@ -139,6 +139,8 @@ namespace LoL_eSport_Team_Mangager
 
                     KdaListPanel.Children.Add(row);
                 }
+
+                // === Legutóbbi meccs statisztika kártya ===
                 LastMatchInfoText.Text = "Meccs: ismeretlen";
                 LastMatchStats1.Text = "";
                 LastMatchStats2.Text = "";
@@ -159,7 +161,7 @@ namespace LoL_eSport_Team_Mangager
                         .Join(context.Players.Where(p => p.TeamId == team.Id),
                               ps => ps.PlayerId,
                               p => p.Id,
-                              (ps, p) => new { p.Name, ps.Score, ps.Form }) // Score és Form értékeket mutatunk
+                              (ps, p) => new { p.Name, ps.Score, ps.Form })
                         .ToList();
 
                     if (playerStats.Count >= 1)
@@ -173,6 +175,43 @@ namespace LoL_eSport_Team_Mangager
                 {
                     LastMatchInfoText.Text = "Nincs lejátszott meccs";
                 }
+
+                // === Legjobb játékos kártya ===
+                BestPlayerNameText.Text = "ismeretlen";
+                BestPlayerStatsText.Text = "Statisztika: ismeretlen";
+                BestPlayerNoteText.Text = "Megjegyzés: -";
+
+                if (lastMatch != null)
+                {
+                    var bestPlayer = context.PlayerStats
+                        .Where(ps => ps.MatchId == lastMatch.Id)
+                        .Join(context.Players.Where(p => p.TeamId == team.Id),
+                              ps => ps.PlayerId,
+                              p => p.Id,
+                              (ps, p) => new { p.Name, ps.Score, ps.Form })
+                        .OrderByDescending(p => p.Score)
+                        .FirstOrDefault();
+
+                    if (bestPlayer != null)
+                    {
+                        BestPlayerNameText.Text = bestPlayer.Name;
+                        BestPlayerStatsText.Text = $"Statisztika: Score: {bestPlayer.Score}, Form: {bestPlayer.Form}";
+                        BestPlayerNoteText.Text = "Megjegyzés: MVP teljesítmény!";
+                    }
+                }
+
+                // === Csapat statisztikák kártya ===
+                var rawMatches = context.Matches
+                    .Where(m => m.TeamId == team.Id && m.Result != null)
+                    .ToList();
+
+                var winCount = rawMatches.Count(r => r.Result == "Win");
+                var totalPlayed = rawMatches.Count;
+                var winRate = totalPlayed > 0 ? (double)winCount / totalPlayed * 100 : 0;
+
+                WinRateText.Text = $"Átlagos győzelmi arány: {Math.Round(winRate, 2)}%";
+                AvgDurationText.Text = "Átlagos játékidő: ismeretlen";
+                MostKillsText.Text = "Legtöbb kill egy meccsen: ismeretlen";
             }
         }
 

@@ -64,16 +64,7 @@ namespace LoL_eSport_Team_Manager
 
         private void Statistics_Click(object sender, RoutedEventArgs e)
         {
-            if (LoggedInCoachTeamId == null && !IsUserAdmin)
-            {
-                MessageBox.Show("Nem tartozik csapat ehhez a felhasználóhoz.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            int teamId = LoggedInCoachTeamId ?? 0; // 0 = Admin (összes csapat)
-
-            var statisticsPage = new StatisticsPage(_context, teamId);
-            MainFrame.Navigate(statisticsPage);
+            MainFrame.Navigate(new StatisticsPage(LoggedInCoachTeamId, IsUserAdmin));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

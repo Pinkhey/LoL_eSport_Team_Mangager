@@ -13,14 +13,14 @@
                       Visibility="Collapsed" />
 
             <!-- Táblázat -->
-            <DataGrid x:Name="StatsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,20"
-                      ItemsSource="{Binding PlayerStatsList}">
+            <DataGrid x:Name="StatsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,20">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Név" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Szerep" Binding="{Binding Role}" />
-                    <DataGridTextColumn Header="KDA" Binding="{Binding KDA, StringFormat=N2}" />
+                    <DataGridTextColumn Header="KDA" Binding="{Binding KDA}" />
                     <DataGridTextColumn Header="Pontszám" Binding="{Binding Score}" />
                     <DataGridTextColumn Header="Forma" Binding="{Binding Form}" />
+                    <!-- DataGridTextColumn Header="Eredmény" Binding="{Binding Result}" /> -->
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -35,7 +35,6 @@
             <!-- Kördiagram: Win/Loss arány -->
             <TextBlock Text="Win/Loss arány" FontWeight="Bold" Margin="0,20,0,5"/>
             <lvc:PieChart Series="{Binding WinLossSeries}" Height="250" />
-
         </StackPanel>
     </ScrollViewer>
 </Page>

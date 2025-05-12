@@ -13,7 +13,7 @@
         <ItemsControl ItemsSource="{Binding Matches}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card Background="LightGray"
+                    <materialDesign:Card Background="{Binding CardBackground}" 
                      Padding="0"
                      Margin="10"
                      materialDesign:ElevationAssist.Elevation="Dp2">

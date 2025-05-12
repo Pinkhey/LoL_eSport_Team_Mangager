@@ -59,7 +59,7 @@ namespace LoL_eSport_Team_Manager
 
         private void Matches_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new MatchesPage());
+            MainFrame.Navigate(new MatchesPage(LoggedInCoachTeamId, IsUserAdmin));
         }
 
         private void Statistics_Click(object sender, RoutedEventArgs e)

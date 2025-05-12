@@ -16,7 +16,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Grid Margin="20">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-                <TextBlock Text="Új felhasználó létrehozása" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+                <TextBlock Text="Új edző hozzáadása" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
                 <TextBlock Text="Felhasználónév:"/>
                 <TextBox x:Name="UsernameTextBox" Margin="0,5"/>

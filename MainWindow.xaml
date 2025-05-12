@@ -67,7 +67,7 @@
                         <TextBlock x:Name="TeamIdDisplay" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="10,0" Visibility="Collapsed"/>
                         <TextBlock x:Name="IsUserAdminDisplay" Foreground="{StaticResource LoLTextBrush}" FontSize="16" Margin="10,0" Visibility="Collapsed"/>
 
-                        <Button Content="Edző hozzáadása"
+                        <Button Content="Edző hozzáadása/törlése"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Background="{StaticResource LoLAccentBrush}"
                                 Foreground="{StaticResource LoLTextBrush}"

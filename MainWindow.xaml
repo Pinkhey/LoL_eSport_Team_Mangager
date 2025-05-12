@@ -12,7 +12,6 @@
         Loaded="Window_Loaded">
 
     <Grid>
-
         <!-- 🔹 HÁTTÉR: Videó + Blur -->
         <Grid>
             <MediaElement Name="BackgroundVideo"
@@ -42,51 +41,49 @@
 
             <!-- 🟦 Fejléc -->
             <materialDesign:Card Grid.Row="0"
-                                 Background="{DynamicResource PrimaryHueMidBrush}"
+                                 Background="Transparent"
                                  materialDesign:ElevationAssist.Elevation="Dp3"
-                                 Margin="0"
                                  Padding="10 0">
                 <DockPanel LastChildFill="True">
-
-                    <TextBlock Text="LoL eSport Team Manager"
-                               Foreground="White"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="20,0,0,0" />
-
-                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,10,0">
-                        <TextBlock x:Name="UsernameDisplay"
-                                   Foreground="White"
-                                   FontSize="16"
-                                   Margin="10,0"/>
-
-                        <TextBlock x:Name="UserIdDisplay"
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="20,0,0,0">
+                        <TextBlock Text="LoL eSport Team Manager"
+                                   Foreground="{StaticResource LoLTextBrush}"
+                                   FontSize="24"
                                    FontWeight="Bold"
-                                   Foreground="White"
-                                   Margin="10,0"/>
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0" />
 
-                        <TextBlock x:Name="TeamIdDisplay"
-                                   FontWeight="Bold"
-                                   Foreground="White"
-                                   Margin="10,0"/>
+                        <Image x:Name="TeamLogoImage"
+                               Height="60"
+                               Width="60"
+                               Margin="0,0,0,0"
+                               Stretch="UniformToFill"
+                               Visibility="Collapsed"/>
+                    </StackPanel>
 
-                        <TextBlock x:Name="IsUserAdminDisplay"
-                                   Foreground="White"
-                                   FontSize="16"
-                                   Margin="10,0"/>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">
+                        <TextBlock x:Name="UsernameDisplay" Foreground="{StaticResource LoLTextBrush}" FontSize="16" Margin="10,0" Visibility="Collapsed"/>
+                        <TextBlock x:Name="UserIdDisplay" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="10,0" Visibility="Collapsed"/>
+                        <TextBlock x:Name="TeamIdDisplay" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="10,0" Visibility="Collapsed"/>
+                        <TextBlock x:Name="IsUserAdminDisplay" Foreground="{StaticResource LoLTextBrush}" FontSize="16" Margin="10,0" Visibility="Collapsed"/>
 
                         <Button Content="Edző hozzáadása/törlése"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Foreground="White"
+                                Background="{StaticResource LoLAccentBrush}"
+                                Foreground="{StaticResource LoLTextBrush}"
+                                Height="40" Width="220"
                                 Margin="10,0"
+                                materialDesign:ElevationAssist.Elevation="Dp1"
                                 x:Name="AddCoachButton"
                                 Click="AddCoachButton_Click"/>
 
                         <Button Content="Kijelentkezés"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Foreground="White"
+                                Background="{StaticResource LoLAccentBrush}"
+                                Foreground="{StaticResource LoLTextBrush}"
+                                Height="40" Width="220"
                                 Margin="10,0"
+                                materialDesign:ElevationAssist.Elevation="Dp1"
                                 x:Name="LogoutButton"
                                 Click="LogoutButton_Click"/>
                     </StackPanel>
@@ -97,45 +94,65 @@
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="220"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="157*"/>
+                    <ColumnDefinition Width="623*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Oldalsáv -->
                 <materialDesign:Card Grid.Column="0"
-                                     Background="{DynamicResource PrimaryHueDarkBrush}"
+                                     Background="Transparent"
                                      Padding="10"
-                                     materialDesign:ElevationAssist.Elevation="Dp2"
-                                     Margin="0">
+                                     materialDesign:ElevationAssist.Elevation="Dp2">
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="Navigáció"
-                                   Foreground="White"
+                                   Foreground="{StaticResource LoLTextBrush}"
                                    FontSize="16"
                                    FontWeight="SemiBold"
                                    Margin="10,20,0,10"/>
 
                         <!-- Menü gombok -->
-                        <Button Margin="10" Click="Dashboard_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <Button Margin="10" Click="Dashboard_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Background="{StaticResource LoLAccentBrush}"
+                                Foreground="{StaticResource LoLTextBrush}"
+                                Height="40" Width="180"
+                                materialDesign:ElevationAssist.Elevation="Dp1">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ViewDashboard" Width="28" Height="28" Margin="0,0,10,0"/>
                                 <TextBlock Text="Dashboard" FontSize="16" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Margin="10" Click="Players_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <Button Margin="10" Click="Players_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Background="{StaticResource LoLAccentBrush}"
+                                Foreground="{StaticResource LoLTextBrush}"
+                                Height="40" Width="180"
+                                materialDesign:ElevationAssist.Elevation="Dp1">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="AccountGroup" Width="28" Height="28" Margin="0,0,10,0"/>
                                 <TextBlock Text="Players" FontSize="16" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Margin="10" Click="Matches_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <Button Margin="10" Click="Matches_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Background="{StaticResource LoLAccentBrush}"
+                                Foreground="{StaticResource LoLTextBrush}"
+                                Height="40" Width="180"
+                                materialDesign:ElevationAssist.Elevation="Dp1">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Soccer" Width="28" Height="28" Margin="0,0,10,0"/>
                                 <TextBlock Text="Matches" FontSize="16" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Margin="10" Click="Statistics_Click" Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <Button Margin="10" Click="Statistics_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Background="{StaticResource LoLAccentBrush}"
+                                Foreground="{StaticResource LoLTextBrush}"
+                                Height="40" Width="180"
+                                materialDesign:ElevationAssist.Elevation="Dp1">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ChartBar" Width="28" Height="28" Margin="0,0,10,0"/>
                                 <TextBlock Text="Statistics" FontSize="16" VerticalAlignment="Center"/>
@@ -145,7 +162,7 @@
                 </materialDesign:Card>
 
                 <!-- Tartalom Frame -->
-                <Border Grid.Column="1" Background="Transparent" Padding="10">
+                <Border Grid.Column="1" Background="Transparent" Padding="10" Grid.ColumnSpan="2">
                     <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
                 </Border>
             </Grid>

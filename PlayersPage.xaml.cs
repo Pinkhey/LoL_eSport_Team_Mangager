@@ -20,9 +20,40 @@ namespace LoL_eSport_Team_Mangager
             InitializeComponent();
             TeamId = teamId;
             IsAdmin = isAdmin;
+            if (IsAdmin)
+            {
+                AdminTeamSelectorPanel.Visibility = Visibility.Visible;
+                LoadTeamsForAdmin();
+            }
 
+            Logger.Log("PlayersPage megnyitva - Admin: " + IsAdmin + ", TeamId: " + TeamId, "INFO", "PlayersPage");
             LoadPlayers();
         }
+
+
+        private void LoadTeamsForAdmin()
+        {
+            try
+            {
+                using (var context = new cnTeamManager.TeamManagerContext())
+                {
+                    var teams = context.Teams
+                        .Select(t => new { t.Id, t.Name })
+                        .ToList();
+
+                    TeamSelectorComboBox.ItemsSource = teams;
+                    TeamSelectorComboBox.DisplayMemberPath = "Name";
+                    TeamSelectorComboBox.SelectedValuePath = "Id";
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Hiba csapatok betöltésekor");
+                MessageBox.Show($"Hiba a csapatok betöltésekor: {ex.Message}");
+            }
+        }
+
+
 
         private void LoadPlayers()
         {
@@ -119,6 +150,7 @@ namespace LoL_eSport_Team_Mangager
 
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(position))
             {
+                Logger.Log("Kitöltetlen mező hiba");
                 MessageBox.Show("Töltsd ki a mezőket.");
                 return;
             }
@@ -131,6 +163,7 @@ namespace LoL_eSport_Team_Mangager
                     if (exists)
                     {
                         MessageBox.Show("Ilyen nevű aktív játékos már létezik ebben a csapatban.");
+                        Logger.Log("duplikált játékos felvételi probálkozás");
                         return;
                     }
 
@@ -141,7 +174,7 @@ namespace LoL_eSport_Team_Mangager
                         TeamId = TeamId.Value,
                         IsPlayerActiveInThisTeam = true
                     };
-
+                    Logger.Log($"Új játékos hozzáadva: {name}, Pozíció: {position}, TeamId: {TeamId.Value}", "INFO", "PlayersPage");
                     context.Players.Add(newPlayer);
                     context.SaveChanges();
                 }
@@ -161,6 +194,12 @@ namespace LoL_eSport_Team_Mangager
 
         private void DeletePlayer_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(PlayerListComboBox.Text))
+            {
+                Logger.Log("Kitöltetlen mező hiba");
+                MessageBox.Show("Töltsd ki a mezőket.");
+                return;
+            }
             if (PlayerListComboBox.SelectedValue is int playerId)
             {
                 try
@@ -168,13 +207,15 @@ namespace LoL_eSport_Team_Mangager
                     using (var context = new cnTeamManager.TeamManagerContext())
                     {
                         var player = context.Players.FirstOrDefault(p => p.Id == playerId);
+                      
                         if (player != null)
                         {
                             player.IsPlayerActiveInThisTeam = false;
                             context.SaveChanges();
+                            Logger.Log($"Játékos inaktiválva: {player.Name}, PlayerId: {player.Id}, TeamId: {TeamId}", "INFO", "PlayersPage");
+
                         }
                     }
-
                     DeleteForm.Visibility = Visibility.Collapsed;
                     LoadPlayers();
                 }

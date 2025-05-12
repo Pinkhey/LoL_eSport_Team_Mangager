@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeamManagerContext;
 using System.IO;
+using LoL_eSport_Team_Manager;
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -30,7 +31,7 @@ namespace LoL_eSport_Team_Mangager
             IsAdmin = isAdmin;
             IsPlayerActiveInThisTeam = isPlayerActiveInThisTeam;
 
-            LogToFile($"PlayersPage megnyitva - Admin: {IsAdmin}, TeamId: {TeamId}");
+            Logger.Log("PlayersPage megnyitva - Admin: " + IsAdmin + ", TeamId: " + TeamId, "INFO", "PlayersPage");
 
             if (IsAdmin)
             {
@@ -113,7 +114,7 @@ namespace LoL_eSport_Team_Mangager
             if (string.IsNullOrWhiteSpace(name))
             {
                 string error = "Hibás adatbevitel: játékos neve üres.";
-                LogToFile(error);
+                Logger.Log(error);
                 MessageBox.Show("Kérlek, add meg a játékos nevét!");
                 return;
             }
@@ -121,7 +122,7 @@ namespace LoL_eSport_Team_Mangager
             if (PlayerPositionComboBox.SelectedItem == null)
             {
                 string error = "Hibás adatbevitel: nincs pozíció kiválasztva.";
-                LogToFile(error);
+                Logger.Log(error);
                 MessageBox.Show("Kérlek, válassz pozíciót!");
                 return;
             }
@@ -144,7 +145,7 @@ namespace LoL_eSport_Team_Mangager
                     if (nameExists)
                     {
                         MessageBox.Show("Már létezik ilyen nevű aktív játékos ebben a csapatban!", "Duplikált név", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        LogToFile($"Sikertelen mentés: duplikált játékosnév ({name}) a TeamId: {TeamId} csapatban.");
+                        Logger.Log($"Sikertelen mentés: duplikált játékosnév ({name}) a TeamId: {TeamId} csapatban.", "WARNING", "PlayersPage");
                         return;
                     }
 
@@ -161,7 +162,7 @@ namespace LoL_eSport_Team_Mangager
 
                     MessageBox.Show($"Játékos sikeresen mentve:\nNév: {name}\nPozíció: {position}");
 
-                    LogToFile($"Új játékos hozzáadva: {name}, Pozíció: {position}, TeamId: {TeamId}");
+                    Logger.Log($"Új játékos hozzáadva: {name}, Pozíció: {position}, TeamId: {TeamId}", "INFO", "PlayersPage");
 
                 }
 
@@ -175,7 +176,7 @@ namespace LoL_eSport_Team_Mangager
             }
             catch (Exception ex)
             {
-                LogToFile($"Hiba játékos mentése közben: {ex.Message}");
+                Logger.Log($"Hiba játékos mentése közben: {ex.Message}");
                 MessageBox.Show($"Hiba mentés közben: {ex.Message}");
             }
         }
@@ -199,7 +200,7 @@ namespace LoL_eSport_Team_Mangager
                             string playerName = player.Name ?? "(ismeretlen név)";
                             MessageBox.Show($"A(z) {playerName} játékos inaktiválva lett.");
 
-                            LogToFile($"Játékos inaktiválva: {playerName}, PlayerId: {player.Id}, TeamId: {TeamId}");
+                            Logger.Log($"Játékos inaktiválva: {playerName}, PlayerId: {player.Id}, TeamId: {TeamId}", "INFO", "PlayersPage");
 
                             LoadPlayersForSelectedTeam();
                             PlayerListComboBox.SelectedIndex = -1;
@@ -212,23 +213,16 @@ namespace LoL_eSport_Team_Mangager
                 }
                 catch (Exception ex)
                 {
-                    LogToFile($"Hiba játékos törlésekor: {ex.Message}");
+                    Logger.Log($"Hiba játékos törlésekor: {ex.Message}");
                     MessageBox.Show($"Hiba a játékos törlésekor: {ex.Message}");
                 }
             }
             else
             {
                 string error = "Hibás művelet: nem választottak ki játékost törléshez.";
-                LogToFile(error);
+                Logger.Log(error);
                 MessageBox.Show("Kérlek, válassz ki egy játékost a törléshez.");
             }
-        }
-
-        private void LogToFile(string message)
-        {
-            string logFilePath = "playersPage_log.txt";
-            string logEntry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
-            File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
         }
     }
 }

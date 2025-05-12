@@ -16,6 +16,8 @@ using cnTeamManager;
 using System.Windows.Media.Imaging;
 using TeamManagerContext;
 using static System.Net.WebRequestMethods;
+using LoL_eSport_Team_Manager;
+
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -98,6 +100,7 @@ namespace LoL_eSport_Team_Mangager
 
                 if (context.Users.Any(u => u.Username == username))
                 {
+                    Logger.Log($"Sikertelen regisztráció (duplikált név): {username}", "WARNING", "RegisterPage");
                     MessageBox.Show("Ez a felhasználónév már létezik.");
                     return;
                 }
@@ -124,7 +127,17 @@ namespace LoL_eSport_Team_Mangager
                 context.Teams.Add(newTeam);
                 context.SaveChanges();
 
+                Logger.Log($"Új felhasználó regisztrálva: {username}", "INFO", "RegisterPage");
                 MessageBox.Show("Sikeres regisztráció!");
+
+                UsernameTextBox.Text = "";
+                PasswordBox.Password = "";
+                IsAdminCheckBox.IsChecked = false;
+                TeamNameTextBox.Text = "";
+                RegionComboBox.SelectedIndex = -1;
+                LeagueComboBox.ItemsSource = null;
+                LogoUrlTextBox.Text = "";
+                LogoSelectorListBox.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
@@ -136,18 +149,33 @@ namespace LoL_eSport_Team_Mangager
         {
             if (UserDeleteComboBox.SelectedItem is string username)
             {
-                var userToDelete = context.Users.FirstOrDefault(u => u.Username == username);
-                if (userToDelete != null)
+                try
                 {
-                    var teams = context.Teams.Where(t => t.Users.Username == username).ToList();
-                    context.Teams.RemoveRange(teams);
+                    var userToDelete = context.Users.FirstOrDefault(u => u.Username == username);
+                    if (userToDelete != null)
+                    {
+                        var teams = context.Teams.Where(t => t.Users.Username == username).ToList();
+                        context.Teams.RemoveRange(teams);
 
-                    context.Users.Remove(userToDelete);
-                    context.SaveChanges();
-                    MessageBox.Show("Felhasználó törölve.");
+                        context.Users.Remove(userToDelete);
+                        context.SaveChanges();
 
-                    UserDeleteComboBox.ItemsSource = context.Users.Select(u => u.Username).ToList();
-                    UserDeleteComboBox.SelectedIndex = -1;
+                        Logger.Log($"Felhasználó törölve: {username}", "INFO", "RegisterPage");
+                        MessageBox.Show("Felhasználó törölve.");
+
+                        UserDeleteComboBox.ItemsSource = context.Users.Select(u => u.Username).ToList();
+                        UserDeleteComboBox.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        Logger.Log($"Törlés sikertelen: felhasználó nem található ({username})", "WARNING", "RegisterPage");
+                        MessageBox.Show("A felhasználó nem található.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Hiba a felhasználó törlésekor ({username}): {ex.Message}", "ERROR", "RegisterPage");
+                    MessageBox.Show("Hiba történt a törlés során: " + ex.Message);
                 }
             }
         }

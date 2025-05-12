@@ -21,19 +21,16 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace LoL_eSport_Team_Mangager
 {
-    /// <summary>
-    /// Interaction logic for MatchesPage.xaml
-    /// </summary>
     public partial class MatchesPage : Page, INotifyPropertyChanged
     {
-
-        public int? TeamId { get; set; }
+        public int? UserId { get; set; } // Ez most a Users.Id, azaz az edző azonosítója
         public bool IsAdmin { get; set; }
         public ObservableCollection<MatchResult> Matches { get; set; }
-        public MatchesPage(int? teamId, bool isAdmin = false)
+
+        public MatchesPage(int? userId, bool isAdmin = false)
         {
             InitializeComponent();
-            TeamId = teamId;
+            UserId = userId;
             IsAdmin = isAdmin;
             DataContext = this;
 
@@ -44,20 +41,24 @@ namespace LoL_eSport_Team_Mangager
         {
             using (var context = new cnTeamManager.TeamManagerContext())
             {
-                // saját csapat meghatározása az edző alapján
-                var team = context.Teams
-                            .FirstOrDefault(t => t.CoachId == TeamId);
+                // Lekérjük a felhasználóhoz (coach-hoz) tartozó csapat(ok)at
+                var teams = context.Teams
+                    .Where(t => t.CoachId == UserId)
+                    .ToList();
 
-                if (team == null)
+                if (!teams.Any())
                 {
-                    MessageBox.Show("Nem található csapat ehhez az edzőhöz.");
+                    MessageBox.Show("Nem található csapat ehhez a felhasználóhoz.");
                     return;
                 }
 
-                // saját csapat meccsei, ellenfél adataival
+                // A csapatok ID-ját kigyűjtjük
+                var teamIds = teams.Select(t => t.Id).ToList();
+
+                // Olyan meccsek, ahol a felhasználó csapata TeamId-ként szerepel
                 var matches = context.Matches
-                    .Where(m => m.TeamId == team.Id)
-                    .Include(m => m.Teams1)
+                    .Where(m => teamIds.Contains(m.TeamId))
+                    .Include(m => m.Teams1) // Teams1 az ellenfél
                     .OrderByDescending(m => m.Date)
                     .Select(m => new MatchResult
                     {
@@ -68,14 +69,9 @@ namespace LoL_eSport_Team_Mangager
                     })
                     .ToList();
 
-
-
-
                 Matches = new ObservableCollection<MatchResult>(matches);
                 OnPropertyChanged(nameof(Matches));
             }
-
-            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,26 +79,25 @@ namespace LoL_eSport_Team_Mangager
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    //
     public class MatchResult
     {
         public DateTime MatchDate { get; set; }
         public string LogoUrl { get; set; }
         public string TeamName { get; set; }
-        public string Result { get; set; } // "Win", "Lose", vagy "-"
+        public string Result { get; set; }
 
         public string ResultText => Result switch
         {
             "Win" => "W",
             "Lose" => "L",
-            "-" => "-"
+            _ => "-"
         };
 
         public Brush ResultColor => Result switch
         {
             "Win" => Brushes.Green,
             "Lose" => Brushes.Red,
-            "-" => Brushes.Gray
+            _ => Brushes.Gray
         };
     }
 }

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="LoL eSport Team Manager"
+        WindowStyle="None"
         Height="700"
         Width="1000"
         WindowStartupLocation="CenterScreen"
@@ -11,7 +12,7 @@
         Background="Transparent"
         Loaded="Window_Loaded">
 
-    <Grid>
+    <Grid >
         <!-- 🔹 HÁTTÉR: Videó + Blur -->
         <Grid>
             <MediaElement Name="BackgroundVideo"
@@ -86,6 +87,26 @@
                                 materialDesign:ElevationAssist.Elevation="Dp1"
                                 x:Name="LogoutButton"
                                 Click="LogoutButton_Click"/>
+
+                        <Button Width="40" Height="40"
+                        ToolTip="Tálcára"
+                        Background="{StaticResource LoLAccentBrush}"
+                        Click="MinimizeButton_Click"
+                        Padding="0"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Kind="WindowMinimize" Width="18" Height="18" Foreground="{StaticResource LoLTextBrush}" />
+                        </Button>
+
+                        <Button Width="40" Height="40" Margin="10px"
+                        ToolTip="Bezárás"
+                        Background="{StaticResource LoLAccentBrush}"
+                        Click="CloseButton_Click"
+                        Padding="0"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                            <materialDesign:PackIcon Kind="Close" Width="18" Height="18" Foreground="{StaticResource LoLTextBrush}" />
+                        </Button>
+
+
                     </StackPanel>
                 </DockPanel>
             </materialDesign:Card>

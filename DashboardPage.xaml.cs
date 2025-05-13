@@ -129,12 +129,15 @@ namespace LoL_eSport_Team_Mangager
                     {
                         Text = player.Name,
                         Width = 150,
+                        FontSize = 10,
                         Foreground = (Brush)FindResource("LoLTextBrush")
                     });
                     row.Children.Add(new TextBlock
                     {
                         Text = kdaText,
-                        Foreground = Brushes.LimeGreen
+                        Foreground = Brushes.LimeGreen,
+                        FontSize = 10
+
                     });
 
                     KdaListPanel.Children.Add(row);

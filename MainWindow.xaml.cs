@@ -32,6 +32,16 @@ namespace LoL_eSport_Team_Manager
             InitializeComponent();
         }
 
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new DashboardPage(LoggedInUsername));
@@ -83,6 +93,8 @@ namespace LoL_eSport_Team_Manager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+
+
             string coachName = UsernameDisplay.Text;
             MainFrame.Navigate(new Pages.WelcomePage(LoggedInUsername));
 

@@ -101,7 +101,7 @@ namespace LoL_eSport_Team_Mangager
                 KdaListPanel.Children.Clear();
 
                 var playersInTeam = context.Players
-                    .Where(p => p.TeamId == team.Id)
+                    .Where(p => p.TeamId == team.Id && p.IsPlayerActiveInThisTeam == true)
                     .Select(p => new { p.Id, p.Name })
                     .ToList();
 
@@ -213,8 +213,6 @@ namespace LoL_eSport_Team_Mangager
                 var winRate = totalPlayed > 0 ? (double)winCount / totalPlayed * 100 : 0;
 
                 WinRateText.Text = $"Átlagos győzelmi arány: {Math.Round(winRate, 2)}%";
-                AvgDurationText.Text = "Átlagos játékidő: ismeretlen";
-                MostKillsText.Text = "Legtöbb kill egy meccsen: ismeretlen";
             }
         }
 

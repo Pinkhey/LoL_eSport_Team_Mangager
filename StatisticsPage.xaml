@@ -3,38 +3,77 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="clr-namespace:LoL_eSport_Team_Mangager"
       xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       Title="StatisticsPage">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="10">
-
+        <StackPanel Margin="10" Background="#1C3D2E80">
+            <!-- Csapatválasztó (admin számára) -->
             <ComboBox x:Name="TeamSelector" Width="200" Margin="0,0,0,10"
                       SelectionChanged="TeamSelector_SelectionChanged"
                       Visibility="Collapsed" />
 
             <!-- Táblázat -->
-            <DataGrid x:Name="StatsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,20">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Név" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Szerep" Binding="{Binding Role}" />
-                    <DataGridTextColumn Header="KDA" Binding="{Binding KDA}" />
-                    <DataGridTextColumn Header="Pontszám" Binding="{Binding Score}" />
-                    <DataGridTextColumn Header="Forma" Binding="{Binding Form}" />
-                    <!-- DataGridTextColumn Header="Eredmény" Binding="{Binding Result}" /> -->
-                </DataGrid.Columns>
-            </DataGrid>
+            <Border Background="#1C3D2E80" CornerRadius="10" Padding="10" Margin="0,0,0,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                </Border.Effect>
+                <DataGrid x:Name="StatsDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                          HeadersVisibility="Column" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Név" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="Szerep" Binding="{Binding Role}" />
+                        <DataGridTextColumn Header="KDA" Binding="{Binding KDA}" />
+                        <DataGridTextColumn Header="Pontszám" Binding="{Binding Score}" />
+                        <DataGridTextColumn Header="Forma" Binding="{Binding Form}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
 
             <!-- Oszlopdiagram: Átlagos KDA -->
-            <TextBlock Text="Átlagos KDA oszlopdiagram" FontWeight="Bold" Margin="0,10,0,5"/>
-            <lvc:CartesianChart Series="{Binding KdaColumnSeries}" XAxes="{Binding KdaXAxis}" Height="250" />
+            <Border Background="#1C3D2E80" CornerRadius="10" Padding="10" Margin="0,0,0,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Átlagos KDA oszlopdiagram" FontWeight="Bold" Margin="0,0,0,10"
+                               Foreground="{StaticResource LoLAccentBrush}"/>
+                    <lvc:CartesianChart Series="{Binding KdaColumnSeries}"
+                                        XAxes="{Binding KdaXAxis}"
+                                        YAxes="{Binding KdaYAxis}"
+                                        Height="250" />
+                </StackPanel>
+            </Border>
 
             <!-- Vonaldiagram: Forma változás játékosonként -->
-            <TextBlock Text="Forma alakulása játékosonként" FontWeight="Bold" Margin="0,20,0,5"/>
-            <lvc:CartesianChart Series="{Binding FormSeries}" LegendPosition="Top" Height="250" />
+            <Border Background="#1C3D2E80" CornerRadius="10" Padding="10" Margin="0,0,0,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Forma alakulása játékosonként" FontWeight="Bold" Margin="0,0,0,10"
+                               Foreground="{StaticResource LoLAccentBrush}"/>
+                    <lvc:CartesianChart Series="{Binding FormSeries}"
+                                        XAxes="{Binding FormXAxis}"
+                                        YAxes="{Binding FormYAxis}"
+                                        LegendPosition="Top"
+                                        Height="250" />
+                </StackPanel>
+            </Border>
 
             <!-- Kördiagram: Win/Loss arány -->
-            <TextBlock Text="Win/Loss arány" FontWeight="Bold" Margin="0,20,0,5"/>
-            <lvc:PieChart Series="{Binding WinLossSeries}" Height="250" />
+            <Border Background="#1C3D2E80" CornerRadius="10" Padding="10" Margin="0,0,0,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Win/Loss arány" FontWeight="Bold" Margin="0,0,0,10"
+                               Foreground="{StaticResource LoLAccentBrush}"/>
+                    <lvc:PieChart Series="{Binding WinLossSeries}" Height="250" />
+                </StackPanel>
+            </Border>
+
         </StackPanel>
     </ScrollViewer>
 </Page>
+

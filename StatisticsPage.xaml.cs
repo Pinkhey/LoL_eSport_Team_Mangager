@@ -17,6 +17,8 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Collections.ObjectModel;
 using cnTeamManager;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace LoL_eSport_Team_Mangager
 {
@@ -24,8 +26,12 @@ namespace LoL_eSport_Team_Mangager
     {
         public ObservableCollection<ISeries> KdaColumnSeries { get; set; }
         public Axis[] KdaXAxis { get; set; }
+        public Axis[] KdaYAxis { get; set; }
 
         public ObservableCollection<ISeries> FormSeries { get; set; }
+        public Axis[] FormXAxis { get; set; }
+        public Axis[] FormYAxis { get; set; }
+
         public ObservableCollection<ISeries> WinLossSeries { get; set; }
 
         public int? TeamId { get; set; }
@@ -108,20 +114,32 @@ namespace LoL_eSport_Team_Mangager
                     .ToList();
 
                 KdaColumnSeries = new ObservableCollection<ISeries>
-                {
-                    new ColumnSeries<double>
-                    {
-                        Values = avgKdas.Select(x => x.AvgKDA).ToArray(),
-                        Name = "KDA"
-                    }
-                };
+        {
+            new ColumnSeries<double>
+            {
+                Values = avgKdas.Select(x => x.AvgKDA).ToArray(),
+                Name = "KDA"
+            }
+        };
 
                 KdaXAxis = new[]
                 {
-                    new Axis { Labels = avgKdas.Select(x => x.Name).ToArray() }
-                };
+            new Axis
+            {
+                Labels = avgKdas.Select(x => x.Name).ToArray(),
+                // Betűszín nem lett meghatározva, az alapértelmezett lesz
+            }
+        };
 
-                // Vonaldiagram: Forma alakulása játékosonként
+                KdaYAxis = new[]
+                {
+            new Axis
+            {
+                // Betűszín nem lett meghatározva, az alapértelmezett lesz
+            }
+        };
+
+                // Forma változás diagram
                 FormSeries = new ObservableCollection<ISeries>();
                 var groupedForm = stats.GroupBy(s => s.Name);
                 foreach (var group in groupedForm)
@@ -133,23 +151,33 @@ namespace LoL_eSport_Team_Mangager
                     });
                 }
 
-                // Kördiagram: Win/Loss arány meccsenként egyszer számolva
-                var matchResults = context.Matches
-                    .Where(m => m.TeamId == TeamId)
-                    .Select(m => m.Result)
-                    .Distinct()  // bár Result stringek, distinct a meccsenkénti duplikáció ellen
-                    .ToList();
+                FormXAxis = new[]
+                {
+            new Axis
+            {
+                // Betűszín nem lett meghatározva, az alapértelmezett lesz
+            }
+        };
 
+                FormYAxis = new[]
+                {
+            new Axis
+            {
+                // Betűszín nem lett meghatározva, az alapértelmezett lesz
+            }
+        };
+
+                // Win/Loss diagram
                 int wins = context.Matches.Count(m => m.TeamId == TeamId && m.Result == "Win");
-                int losses = context.Matches.Count(m => m.TeamId == TeamId && m.Result == "Loss");
+                int losses = context.Matches.Count(m => m.TeamId == TeamId && m.Result == "Lose");
 
                 WinLossSeries = new ObservableCollection<ISeries>
-                {
-                    new PieSeries<double> { Values = new[] { (double)wins }, Name = "Win" },
-                    new PieSeries<double> { Values = new[] { (double)losses }, Name = "Loss" }
-                };
+        {
+            new PieSeries<double> { Values = new[] { (double)wins }, Name = "Win" },
+            new PieSeries<double> { Values = new[] { (double)losses }, Name = "Lose" }
+        };
 
-                // Adatkötések frissítése
+                // DataContext frissítése
                 DataContext = null;
                 DataContext = this;
             }

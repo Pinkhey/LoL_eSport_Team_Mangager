@@ -14,7 +14,7 @@
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <Border CornerRadius="10" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Edzői adatok" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Edzői adatok" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLAccentBrush}" Margin="0,0,0,10"/>
                         <TextBlock x:Name="CoachNameText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="TeamNameText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="MatchCountText" Foreground="{StaticResource LoLTextBrush}"/>
@@ -30,7 +30,7 @@
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <Border CornerRadius="10" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Következő meccs" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Következő meccs" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLAccentBrush}" Margin="0,0,0,10"/>
                         <TextBlock x:Name="NextMatchOpponentText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="NextMatchDateText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="NextMatchHighlightPlayerText" Foreground="{StaticResource LoLTextBrush}"/>
@@ -40,14 +40,30 @@
 
             <!-- Kártya 3: Átlagos KDA -->
             <materialDesign:Card Background="{StaticResource LoLSecondaryBrush}"
-                                 Padding="0"
-                                 Margin="10"
-                                 materialDesign:ElevationAssist.Elevation="Dp2">
+                     Padding="0"
+                     Margin="10"
+                     materialDesign:ElevationAssist.Elevation="Dp2">
                 <Border CornerRadius="10" Padding="20">
-                    <StackPanel>
-                        <TextBlock Text="Játékosok átlagos KDA-ja" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
-                        <StackPanel x:Name="KdaListPanel" />
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <!-- Cím -->
+                            <RowDefinition Height="*" />
+                            <!-- Lista (görgethető rész) -->
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Játékosok átlagos KDA-ja"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource LoLAccentBrush}"
+                       Margin="0,0,0,10"
+                       Grid.Row="0"/>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          Grid.Row="1">
+                            <StackPanel x:Name="KdaListPanel" Margin="0 0 0 10"/>
+                        </ScrollViewer>
+                    </Grid>
                 </Border>
             </materialDesign:Card>
 
@@ -58,7 +74,7 @@
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <Border CornerRadius="10" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Legutóbbi meccs statisztika" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Legutóbbi meccs statisztika" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLAccentBrush}" Margin="0,0,0,10"/>
                         <TextBlock x:Name="LastMatchInfoText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="LastMatchStats1" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="LastMatchStats2" Foreground="{StaticResource LoLTextBrush}"/>
@@ -74,7 +90,7 @@
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <Border CornerRadius="10" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Legjobb játékos (utolsó meccs)" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Legjobb játékos (utolsó meccs)" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLAccentBrush}" Margin="0,0,0,10"/>
                         <TextBlock x:Name="BestPlayerNameText" FontSize="18" FontWeight="Bold" Foreground="LimeGreen"/>
                         <TextBlock x:Name="BestPlayerStatsText" Foreground="{StaticResource LoLTextBrush}" Margin="0,5,0,0"/>
                         <TextBlock x:Name="BestPlayerNoteText" Foreground="{StaticResource LoLTextBrush}"/>
@@ -89,7 +105,7 @@
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <Border CornerRadius="10" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Csapat átlag statisztikák" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Csapat átlag statisztikák" FontSize="20" FontWeight="Bold" Foreground="{StaticResource LoLAccentBrush}" Margin="0,0,0,10"/>
                         <TextBlock x:Name="WinRateText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="AvgDurationText" Foreground="{StaticResource LoLTextBrush}"/>
                         <TextBlock x:Name="MostKillsText" Foreground="{StaticResource LoLTextBrush}"/>

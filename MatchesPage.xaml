@@ -10,47 +10,85 @@
       Title="MatchesPage">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding Matches}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <materialDesign:Card Background="{Binding CardBackground}" 
+        <StackPanel Margin="20">
+            <!-- Új Meccs Felvitele -->
+            <materialDesign:Card Background="{StaticResource LoLSecondaryBrush}" Margin="0 0 0 20" Width="500">
+                <StackPanel Margin="20">
+
+                    <TextBlock Text="Új meccs rögzítése" 
+                       FontSize="20" FontWeight="Bold" 
+                       Foreground="{StaticResource LoLTextBrush}" Margin="0,0,0,10"/>
+
+                    <!-- Dátum -->
+                    <TextBox x:Name="MatchDateTextBox"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Background="{StaticResource LoLPrimaryBrush}"
+                     Foreground="{StaticResource LoLTextBrush}"
+                     materialDesign:HintAssist.Hint="Dátum (YYYY-MM-DD)"
+                     Margin="0,0,0,10"/>
+
+                    <!-- Ellenfél -->
+                    <ComboBox x:Name="OpponentComboBox"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Background="{StaticResource LoLPrimaryBrush}"
+                      Foreground="{StaticResource LoLTextBrush}"
+                      materialDesign:HintAssist.Hint="Ellenfél kiválasztása"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"
+                      Margin="0,0,0,20"/>
+
+                    <!-- Mentés gomb -->
+                    <Button Content="Meccs hozzáadása"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Background="{StaticResource LoLAccentBrush}"
+                    Foreground="{StaticResource LoLTextBrush}"
+                    Height="40" Width="200"
+                    Click="AddMatchButton_Click"/>
+                </StackPanel>
+            </materialDesign:Card>
+            
+            <ItemsControl ItemsSource="{Binding Matches}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Card Background="{Binding CardBackground}" 
                      Padding="0"
                      Margin="10"
                      materialDesign:ElevationAssist.Elevation="Dp2">
-                        <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10" CornerRadius="5">
-                            <StackPanel HorizontalAlignment="Center" Width="150">
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10" CornerRadius="5">
+                                <StackPanel HorizontalAlignment="Center" Width="150">
 
-                                <!-- Dátum -->
-                                <TextBlock Text="{Binding MatchDate, StringFormat='{}{0:yyyy.MM.dd}'}" 
+                                    <!-- Dátum -->
+                                    <TextBlock Text="{Binding MatchDate, StringFormat='{}{0:yyyy.MM.dd}'}" 
                                        FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5"/>
 
-                                <!-- Kép (csapat logó) -->
-                                <Image Width="80" Height="80" Stretch="Uniform"
+                                    <!-- Kép (csapat logó) -->
+                                    <Image Width="80" Height="80" Stretch="Uniform"
                                    Source="{Binding LogoUrl}" Margin="0,0,0,5"/>
 
-                                <!-- Csapat neve -->
-                                <TextBlock Text="{Binding TeamName}" 
+                                    <!-- Csapat neve -->
+                                    <TextBlock Text="{Binding TeamName}" 
                                        FontSize="14" FontWeight="SemiBold" 
                                        HorizontalAlignment="Center" Margin="0,0,0,2"/>
 
-                                <!-- Eredmény -->
-                                <TextBlock Text="{Binding ResultText}" 
+                                    <!-- Eredmény -->
+                                    <TextBlock Text="{Binding ResultText}" 
                                        Foreground="{Binding ResultColor}" 
                                        FontSize="18" FontWeight="Bold"
                                        HorizontalAlignment="Center"/>
 
-                            </StackPanel>
-                        </Border>
-                    </materialDesign:Card>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
+                                </StackPanel>
+                            </Border>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
 
-            <!-- Layout Panel -->
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+                <!-- Layout Panel -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
     </ScrollViewer>
 </Page>

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,9 @@ namespace LoL_eSport_Team_Mangager
     {
         public int? UserId { get; set; } // Ez most a Users.Id, azaz az edző azonosítója
         public bool IsAdmin { get; set; }
+
+        private List<Teams> allTeams;
+
         public ObservableCollection<MatchResult> Matches { get; set; }
 
         public MatchesPage(int? userId, bool isAdmin = false)
@@ -52,6 +56,20 @@ namespace LoL_eSport_Team_Mangager
                     return;
                 }
 
+                var ownTeam = context.Teams.FirstOrDefault(t => t.CoachId == UserId);
+
+                if (ownTeam == null)
+                {
+                    MessageBox.Show("Nem található a bejelentkezett edző csapata.");
+                    return;
+                }
+
+                //ComboBoxba megjelenítjük az összes ellenfél csapatot
+                allTeams = context.Teams
+                      .Where(t => t.Id != ownTeam.Id && t.League == ownTeam.League)
+                      .ToList();
+                OpponentComboBox.ItemsSource = allTeams;
+
                 // A csapatok ID-ját kigyűjtjük
                 var teamIds = teams.Select(t => t.Id).ToList();
 
@@ -77,6 +95,66 @@ namespace LoL_eSport_Team_Mangager
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        private void AddMatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Dátumellenőrzés
+            if (!DateTime.TryParse(MatchDateTextBox.Text, out DateTime matchDateTime))
+            {
+                MessageBox.Show("Hibás dátum formátum. Használj ilyen formát: 2025-07-01");
+                return;
+            }
+
+            if (matchDateTime <= DateTime.Now)
+            {
+                MessageBox.Show("A meccs dátuma csak jövőbeli lehet.");
+                return;
+            }
+
+            if (OpponentComboBox.SelectedItem is not Teams selectedOpponent)
+            {
+                MessageBox.Show("Kérlek, válassz ki egy ellenfelet.");
+                return;
+            }
+
+            using (var context = new cnTeamManager.TeamManagerContext())
+            {
+                var ownTeam = context.Teams.FirstOrDefault(t => t.CoachId == UserId);
+                if (ownTeam == null)
+                {
+                    MessageBox.Show("Nem található a bejelentkezett edző csapata.");
+                    return;
+                }
+
+                // Ellenőrizzük, hogy az ellenfél ugyanabban a ligában van-e
+                if (ownTeam.League != selectedOpponent.League)
+                {
+                    MessageBox.Show("Csak azonos ligában lévő ellenfelet választhatsz ki.");
+                    return;
+                }
+
+                // Hozzáadjuk az új meccset
+                var newMatch = new Matches
+                {
+                    Date = matchDateTime,
+                    TeamId = ownTeam.Id,
+                    OpponentId = selectedOpponent.Id,
+                    Result = "-" // Alapértelmezett érték, még nincs eredmény
+                };
+
+                context.Matches.Add(newMatch);
+                context.SaveChanges();
+            }
+
+            MessageBox.Show("Meccs sikeresen hozzáadva!");
+
+            // Meccsek újratöltése
+            LoadMatchesFromDatabase();
+
+            // Tisztítás
+            MatchDateTextBox.Text = "";
+            OpponentComboBox.SelectedItem = null;
+        }
     }
 
     public class MatchResult

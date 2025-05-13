@@ -37,7 +37,7 @@
                 </Border.Effect>
                 <StackPanel>
                     <TextBlock Text="Átlagos KDA oszlopdiagram" FontWeight="Bold" Margin="0,0,0,10"
-                               Foreground="{StaticResource LoLAccentBrush}"/>
+                               Foreground="{StaticResource LoLTextBrush}"/>
                     <lvc:CartesianChart Series="{Binding KdaColumnSeries}"
                                         XAxes="{Binding KdaXAxis}"
                                         YAxes="{Binding KdaYAxis}"
@@ -52,7 +52,7 @@
                 </Border.Effect>
                 <StackPanel>
                     <TextBlock Text="Forma alakulása játékosonként" FontWeight="Bold" Margin="0,0,0,10"
-                               Foreground="{StaticResource LoLAccentBrush}"/>
+                               Foreground="{StaticResource LoLTextBrush}"/>
                     <lvc:CartesianChart Series="{Binding FormSeries}"
                                         XAxes="{Binding FormXAxis}"
                                         YAxes="{Binding FormYAxis}"
@@ -68,7 +68,7 @@
                 </Border.Effect>
                 <StackPanel>
                     <TextBlock Text="Win/Loss arány" FontWeight="Bold" Margin="0,0,0,10"
-                               Foreground="{StaticResource LoLAccentBrush}"/>
+                               Foreground="{StaticResource LoLTextBrush}"/>
                     <lvc:PieChart Series="{Binding WinLossSeries}" Height="250" />
                 </StackPanel>
             </Border>

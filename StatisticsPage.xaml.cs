@@ -118,8 +118,13 @@ namespace LoL_eSport_Team_Mangager
             new ColumnSeries<double>
             {
                 Values = avgKdas.Select(x => x.AvgKDA).ToArray(),
-                Name = "KDA"
+                Name = "KDA",
+                Fill = new SolidColorPaint(SKColor.Parse("#C89B3C"))
+
             }
+
+
+
         };
 
                 KdaXAxis = new[]
@@ -127,6 +132,7 @@ namespace LoL_eSport_Team_Mangager
             new Axis
             {
                 Labels = avgKdas.Select(x => x.Name).ToArray(),
+                LabelsPaint = new SolidColorPaint(SKColor.Parse("#C89B3C")),
                 // Betűszín nem lett meghatározva, az alapértelmezett lesz
             }
         };
@@ -155,7 +161,7 @@ namespace LoL_eSport_Team_Mangager
                 {
             new Axis
             {
-                // Betűszín nem lett meghatározva, az alapértelmezett lesz
+               LabelsPaint = new SolidColorPaint(SKColor.Parse("#C89B3C")),
             }
         };
 
@@ -163,7 +169,7 @@ namespace LoL_eSport_Team_Mangager
                 {
             new Axis
             {
-                // Betűszín nem lett meghatározva, az alapértelmezett lesz
+                LabelsPaint = new SolidColorPaint(SKColor.Parse("#C89B3C")),
             }
         };
 
